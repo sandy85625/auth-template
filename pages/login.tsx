@@ -1,7 +1,8 @@
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import app from '../firebase/firebase.config';
+import { app } from '../firebase/firebase.config';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
+import { saveProfileData } from '../api/profile';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -25,8 +26,20 @@ export default function Login() {
     const provider = new GoogleAuthProvider();
     
     try {
-      await signInWithPopup(auth, provider);
-      router.push('/dashboard');
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      if (user) {
+        await saveProfileData(
+          user.displayName || '', 
+          user.email || '', 
+          user.phoneNumber || '', 
+          user.photoURL || '',
+          user
+        );
+        router.push('/dashboard');
+      } else {
+        throw new Error('No user found');
+      }
     } catch (error: any) {
       alert(error.message);
     }
@@ -97,7 +110,7 @@ export default function Login() {
         </form>
         <div>
           <button onClick={googleSignIn}>Sign in with Google</button>
-          </div>
+        </div>
       </div>
     </div>
   );
