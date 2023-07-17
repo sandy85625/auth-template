@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import Navbar from '../../components/navbar';
+import Navbar from '../../components/navbars/dashboard-navbar';
 import ItemsCard from '../../components/cards/dashboard-cards/items-card';
 
 export default function Dashboard() {

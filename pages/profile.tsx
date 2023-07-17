@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import { readProfileData } from '../api/profile';
 import Image from 'next/image';
 import ProfileField from '../components/fields/profile-fields/profile-fields';
-import Navbar from '../components/navbar';
+import Navbar from '../components/navbars/dashboard-navbar';
 
 interface ProfileData {
   name: string;
