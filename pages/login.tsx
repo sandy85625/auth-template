@@ -3,7 +3,7 @@ import { app } from '../firebase/firebase.config';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { saveProfileData } from '../api/profile';
-import LandingNavbar from '../components/navbars/landing-navbar';
+import LandingNavbar from '../components/navbars/LandingNavbar';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,9 +12,9 @@ export default function Login() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const auth = getAuth(app);
 
     try {
+      const auth = getAuth(app);
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/dashboard');
     } catch (error: any) {
@@ -23,10 +23,10 @@ export default function Login() {
   };
 
   const googleSignIn = async () => {
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
     
     try {
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       if (user) {

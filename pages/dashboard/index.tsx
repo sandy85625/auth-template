@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import Navbar from '../../components/navbars/dashboard-navbar';
-import ItemsCard from '../../components/cards/dashboard-cards/items-card';
+import Navbar from '../../components/navbars/DashboardNavbar';
+import ItemsCard from '../../components/cards/dashboard-cards/ItemsCard';
 
 export default function Dashboard() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {

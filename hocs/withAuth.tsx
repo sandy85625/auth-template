@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../hooks/useAuth';
+import LoadingSpinner from '../components/loaders/LoadingSpinner';
 
 const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = []) => {
   const AuthenticatedComponent: React.FC = (props) => {
@@ -14,8 +15,7 @@ const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = 
     }, [user, loading, router, exceptions]);
 
     if (loading || (!exceptions.includes(router.pathname) && !user)) {
-      // You can show a loading spinner or other UI here
-      return null;
+      return <LoadingSpinner />;
     }
 
     return <WrappedComponent {...props} />;

@@ -1,10 +1,5 @@
 import React from 'react';
-
-interface CreateNewCardProps {
-  title: string;
-  description: string;
-  onClick: () => void;
-}
+import { CreateNewCardProps } from '../../../interfaces';
 
 const ItemsCard: React.FC<CreateNewCardProps> = ({
   title,

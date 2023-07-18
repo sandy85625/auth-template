@@ -1,7 +1,7 @@
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { app } from '../firebase/firebase.config';
 import { FormEvent, useState } from 'react';
-import LandingNavbar from '../components/navbars/landing-navbar';
+import LandingNavbar from '../components/navbars/LandingNavbar';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState('');

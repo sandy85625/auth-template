@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-
-interface ProfileFieldProps {
-  label: string;
-  value: string;
-  isSensitive?: boolean;
-}
+import { ProfileFieldProps } from '../../../interfaces'
 
 const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, isSensitive = false }) => {
   const [reveal, setReveal] = useState(false);

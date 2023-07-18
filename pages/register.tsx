@@ -3,7 +3,7 @@ import { app } from '../firebase/firebase.config';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { saveProfileData } from '../api/profile';
-import LandingNavbar from '../components/navbars/landing-navbar';
+import LandingNavbar from '../components/navbars/LandingNavbar';
 
 
 export default function Register() {
@@ -170,4 +170,4 @@ export default function Register() {
     </div>
     </>
   );
-}
+  } 
