@@ -44,9 +44,11 @@ export default function Collections() {
       <hr className="my-8 border-gray-300" />
       <div className="flex flex-wrap justify-center">
         {nfts.map((nft, index) => (
+            <div key={index}>
           <Link href={`/collections/${collectionId}/${nft.id}`}>
-            <NFTCard key={index} {...nft} />
+            <NFTCard {...nft} />
           </Link>
+          </div>
         ))}
       </div>
     </div>

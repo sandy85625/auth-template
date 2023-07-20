@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { INFT } from '../../interfaces';
 
 interface NFTDetailsProps {
@@ -16,7 +17,7 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft }) => {
     return (
       <div className="my-10 w-1/2 flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden mx-auto">
         <div className="md:flex-shrink-0 md:w-56 md:h-56 m-3">
-          <img src={nft.imageUrl} alt={nft.name} className="w-full h-full object-cover" />
+          <Image src={nft.imageUrl} alt={nft.name} className="w-full h-full object-cover" />
         </div>
         <div className="p-8">
           <h2 className="block mt-1 text-lg leading-tight font-semibold text-gray-900">{nft.name}</h2>

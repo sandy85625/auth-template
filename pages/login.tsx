@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { saveProfileData } from '../api/profile';
 import LandingNavbar from '../components/navbars/LandingNavbar';
+import Link from 'next/link';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -96,9 +97,9 @@ export default function Login() {
 
           <div className="flex items-center justify-between">
             <div className="text-sm">
-              <a href="/reset-password" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <Link href="/reset-password" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Forgot your password?
-              </a>
+              </Link>
             </div>
           </div>
 

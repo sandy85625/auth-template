@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
                 onClick={toggleDropdown}
                 onMouseEnter={toggleDropdown}
                 >
-                <img
+                <Image
                     className="h-12 w-12 rounded-full cursor-pointer"
                     src={user.photoURL || '/placeholder.jpg'}
                     alt="Profile Photo"
