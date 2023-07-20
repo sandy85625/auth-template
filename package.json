@@ -10,17 +10,25 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.14",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
     "ethers": "^6.6.4",
     "firebase": "^9.0.0",
+    "form-data": "^4.0.0",
     "next": "13.4.10",
     "postcss": "^8.4.26",
+    "qrcode": "^1.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
+    "react-hook-form": "^7.45.2",
+    "shortid": "^2.2.16",
     "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.1",
     "@types/react": "18.2.15",
+    "@types/shortid": "^0.0.29",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "typescript": "5.1.6"

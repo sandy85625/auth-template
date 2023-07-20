@@ -10,7 +10,11 @@ const ProfileField: React.FC<ProfileFieldProps> = ({ label, value, isSensitive =
       <div className='col-span-2 flex'>
       <p className="text-gray-600 pr-4 ">{reveal || !isSensitive ? value : '••••••••'}</p>
       {isSensitive && (
-        <button onClick={() => setReveal(!reveal)} className="text-red-500" title={reveal ? 'Sensitive Information! Handle with care. Never reveal publically' :  'Sensitive Information! Handle with care. Never reveal publically'}>
+        <button 
+          onClick={() => setReveal(!reveal)} 
+          className="text-red-500" 
+          title={reveal ? 'Sensitive Information! Handle with care. Never reveal publically' :  'Sensitive Information! Handle with care. Never reveal publically'}
+        >
           {reveal ? 'Hide' : 'Show (Sensitive Information! Never show publically!)'}
         </button>
       )}

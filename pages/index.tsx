@@ -5,7 +5,7 @@ const Home: NextPage = () => {
   return (
     <>
       <LandingNavbar />
-      <div className="px-24">
+      <div>
         hello
       </div>
     </>

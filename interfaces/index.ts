@@ -10,5 +10,12 @@ export type { ProfileFieldPropsImplementation as ProfileFieldProps } from './pro
 export type { CreateNewCardPropsImplementation as CreateNewCardProps } from './cards';
 
 // Errors
+export type { ErrorPagePropsImplementation as ErrorPageProps } from './errors';
 
-export type {ErrorPagePropsImplementation as ErrorPageProps } from './errors';
+// NftForms
+export type {
+    INFTImplementation as INFT,
+    INFTMetadataImplementation as INFTMetadata,
+    INFTFormInputImplementation as INFTFormInput,
+    INFTClassFieldPropsImplementation as INFTClassFieldProps
+} from './nft-forms'

@@ -5,11 +5,11 @@ import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/router';
 
 const linkData = [
-    { href: '/collections', label: 'Collections' },
-    { href: '/dataset', label: 'Datasets' },
-    { href: '/analytics', label: 'Analytics' },
-    { href: '/reports', label: 'Reports' },
-    { href: '/settings', label: 'Settings' },
+    { href: '/collections', label: 'Collections', description: 'Create new collection', status: true },
+    { href: '/datasets', label: 'Datasets', description: 'View/Add datasets', status: true  },
+    { href: '/analytics', label: 'Analytics', description: 'Not available at the moment!', status: true  },
+    { href: '/reports', label: 'Reports', description: 'Not available at the moment!', status: true  },
+    { href: '/settings', label: 'Settings', description: 'Not available at the moment!', status: false  },
   ];
 
 const Navbar: React.FC = () => {
@@ -37,10 +37,10 @@ const Navbar: React.FC = () => {
                 <Image src="/logo.png" alt="Logo" width={100} height={25} />
             </Link>
             <div className="flex flex-row ml-4 space-x-4">
-            {linkData.map((link) => (
+            {linkData.filter(link => link.status).map((link) => (
                 <Link href={link.href} key={link.href}>
-                <div>
-                    <a className="text-white hover:text-gray-400">{link.label}</a>
+                <div className={`hover:bg-gray-200 hover:text-gray-700 px-4 py-2 rounded-md ${router.pathname === link.href ? 'text-gray-700 bg-gray-200 text-gray-700' : 'text-white'}`} title={link.description}>
+                  {link.label}
                 </div>
                 </Link>
             ))}
@@ -61,20 +61,21 @@ const Navbar: React.FC = () => {
                 />
                 </button>
                 {isDropdownOpen && (
-                <div className="absolute right-0 w-48 bg-white rounded-md shadow-lg py-2">
-                    <button
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
-                    onClick={handleProfile}
-                    >
-                    Profile
-                    </button>
-                    <button
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
-                    onClick={handleLogout}
-                    >
-                    Logout
-                    </button>
-                </div>
+                  <div className="absolute right-0 w-48 bg-white rounded-md shadow-lg py-2 border-2 border-gray-200">
+                      <button
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                      onClick={handleProfile}
+                      >
+                      Profile
+                      </button>
+                      <hr />
+                      <button
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                      onClick={handleLogout}
+                      >
+                      Logout
+                      </button>
+                  </div>
                 )}
             </div>
             </div>

@@ -7,9 +7,9 @@ import ProfileField from '../components/fields/profile-fields/ProfileFields';
 import Navbar from '../components/navbars/DashboardNavbar';
 import { ProfileData } from '../interfaces';
 import LoadingSpinner from '../components/loaders/LoadingSpinner';
+import { NextPage } from 'next';
 
-
-const Profile: React.FC = () => {
+const Profile: NextPage = () => {
     const { user, logout } = useAuth();
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const router = useRouter();

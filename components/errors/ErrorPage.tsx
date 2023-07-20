@@ -12,8 +12,7 @@ const ErrorPage: FC<ErrorPageProps> = ({ error }) => {
             <h1 className="text-3xl font-bold">Oops! Something went wrong...</h1>
             <p className="mt-4 text-lg">{error || "We're sorry for the inconvenience. Our team is looking into it."}</p>
             <Link href="/">
-                <div>
-                <a className="mt-8 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">Go to Home Page</a>
+                <div  className="mt-8 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">Go to Home Page
                 </div>
             </Link>
         </div>
