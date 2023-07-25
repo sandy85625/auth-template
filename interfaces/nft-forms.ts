@@ -1,44 +1,47 @@
 import { Control } from 'react-hook-form';
 
-interface INFTImplementation {
-  id?: string,
-  name: string;
-  description?: string;
-  basePrice: number;
-  imageUrl: string;
-  externalUrl: string;
-  shortURL: string;
-  attributes: {
-    traitName: string,
-    traitValue: string,
-    traitType: string
-
-  }
-  // More properties based on your NFT structure
-}
-interface INFTMetadataImplementation {
-  trait_class: string;
-  trait_name: string;
-  trait_value: string;
-  trait_count: number;
+interface CollectionAttribute {
+  trait_type: string;
+  value: string | number;
+  percentage: number;
 }
 
- interface INFTFormInputImplementation {
+interface CollectionFormData {
+  CollectionName: string;
+  CollectionDescription: string;
+  CollectionBasePrice: number;
+  NFTClass: string;
+  CollectionTotalNumberOfNFTs: number;
+  CollectionAttributesList: Array<CollectionAttribute>;
+}
+
+interface NFTMetadataAttribute {
+  trait_type: string;
+  value: string | number;
+}
+
+interface NFTMetadata {
+  id?:string;
   name: string;
   description: string;
-  nft_external_url: string;
-  nft_base_price: string;
-  nft_metadatas: INFTMetadataImplementation[];
+  basePrice: number;
+  currentPrice: number;
+  image: string;
+  attributes: Array<NFTMetadataAttribute>;
 }
 
-interface INFTClassFieldPropsImplementation {
-  control: Control<INFTFormInputImplementation>;
+interface CollectionFormInput extends CollectionFormData {}
+
+interface CollectionFieldProps {
+  control: Control<CollectionFormInput>;
   register: any;
 }
-  export type {
-    INFTImplementation,
-    INFTMetadataImplementation,
-    INFTFormInputImplementation,
-    INFTClassFieldPropsImplementation
-  }
-  
+
+export type {
+  CollectionAttribute,
+  CollectionFormData,
+  NFTMetadataAttribute,
+  NFTMetadata,
+  CollectionFormInput,
+  CollectionFieldProps
+}

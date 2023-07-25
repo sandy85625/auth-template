@@ -1,24 +1,25 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { INFT } from '../../../interfaces';
-import { fetchNFTById } from '../../../api/nft';
+import { fetchNFTByNFTId } from '../../../api/nft';
 import Navbar from '../../../components/navbars/DashboardNavbar';
 import { useAuth } from '../../../hooks/useAuth';
 import { NFTDetails } from '../../../components/collections/NFTDetails';
+import { NFTMetadata } from '../../../interfaces/nft-forms';
 
 export default function NFTExpanded() {
   const router = useRouter();
   const { nftId, collectionId } = router.query;
-  const [nft, setNft] = useState<INFT | null>(null);
+  const [nft, setNft] = useState<NFTMetadata | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
-    if (nftId && user) {
-      fetchNFTById(user.uid, collectionId as string, nftId as string)
+    if (nftId && collectionId && user) {
+      fetchNFTByNFTId(user.uid, collectionId as string, nftId as string)
         .then(setNft)
         .catch(console.error);
     }
   }, [nftId, collectionId, user]);
+  
 
   return (
     <div className="bg-gray-300 min-h-screen">

@@ -1,7 +1,7 @@
-import { INFT } from '../../interfaces';
+import { NFTMetadata } from "../../interfaces/nft-forms";
 
 interface NFTDetailsProps {
-  nft: INFT;
+  nft: NFTMetadata;
 }
 
 export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft }) => {
@@ -14,31 +14,32 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft }) => {
     }
   
     return (
-      <div className="my-10 w-1/2 flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden mx-auto">
+      <div className="my-10 w-full md:w-1/2 mx-auto flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden">
         <div className="md:flex-shrink-0 md:w-56 md:h-56 m-3">
-          <img src={nft.imageUrl} alt={nft.name} className="w-full h-full object-cover" />
+          <img src={nft.image} alt={nft.name} className="w-full h-full object-cover rounded-lg" />
         </div>
-        <div className="p-8">
-          <h2 className="block mt-1 text-lg leading-tight font-semibold text-gray-900">{nft.name}</h2>
-          <p className="mt-2 text-gray-500">{nft.description}</p>
-  
+        <div className="p-6">
+          <h2 className="text-lg leading-tight font-semibold text-gray-900">{nft.name}</h2>
+          <p className="mt-2 text-gray-600">{nft.description}</p>
+
           <div className="mt-6">
-            <h4 className="text-sm text-gray-500">Attributes</h4>
-            <div className="mt-2">
-              <div className="flex items-center">
-                <p className="mr-4 text-sm text-gray-700">{nft.attributes.traitName}</p>
-                <p className="mr-4 text-sm text-gray-700">{nft.attributes.traitValue}</p>
-                <p className="text-sm text-gray-700">{nft.attributes.traitType}</p>
-              </div>
+            <h4 className="text-sm text-gray-500 uppercase tracking-wider">Attributes</h4>
+            <div className="mt-2 space-y-1">
+              {nft.attributes.map((attribute, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <p className="mr-4 text-sm text-gray-700">{attribute.trait_type} :</p>
+                  <p className="text-sm text-gray-700">{attribute.value.toString().toUpperCase()}</p>
+                </div>
+              ))}
             </div>
           </div>
-  
           <div className="mt-6">
-            <h4 className="text-sm text-gray-500">Base Price</h4>
-            <p className="mt-1 text-lg text-gray-700">{nft.basePrice}</p>
+            <h4 className="text-sm text-gray-500 uppercase tracking-wider">Base Price</h4>
+            <p className="mt-1 text-lg text-green-600 font-semibold">{nft.basePrice}</p>
           </div>
         </div>
       </div>
+
     );
   };
   

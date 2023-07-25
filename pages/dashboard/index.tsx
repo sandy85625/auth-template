@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import Navbar from '../../components/navbars/DashboardNavbar';
 import LoadingSpinner from '../../components/loaders/LoadingSpinner';
 import Landing from '../../components/dashboard/Landing';
+import Footer from '../../components/Footer'
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -18,6 +19,7 @@ export default function Dashboard() {
     <div>
       <Navbar />
       <Landing user={user} />
+      <Footer />
     </div>
   );
 }

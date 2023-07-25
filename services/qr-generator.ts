@@ -16,9 +16,9 @@ function dataURLtoBlob(dataurl: string) {
     return new Blob([u8arr], {type: mime});
 }
 
-export async function generateQRCode(data: string, url: string, logoImage: string) {
+export async function generateQRCode(url: string, imageClass: string, logoImage: string) {
     try {
-        const qrCodeDataURL = await QRCode.toDataURL(data);
+        const qrCodeDataURL = await QRCode.toDataURL(url);
         return dataURLtoBlob(qrCodeDataURL);
     } catch (err) {
         console.error(err);

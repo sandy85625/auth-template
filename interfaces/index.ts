@@ -11,11 +11,3 @@ export type { CreateNewCardPropsImplementation as CreateNewCardProps } from './c
 
 // Errors
 export type { ErrorPagePropsImplementation as ErrorPageProps } from './errors';
-
-// NftForms
-export type {
-    INFTImplementation as INFT,
-    INFTMetadataImplementation as INFTMetadata,
-    INFTFormInputImplementation as INFTFormInput,
-    INFTClassFieldPropsImplementation as INFTClassFieldProps
-} from './nft-forms'

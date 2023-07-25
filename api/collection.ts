@@ -1,15 +1,16 @@
 import { addDoc, collection, getDoc, doc, getDocs } from "firebase/firestore";
 import { database } from "../firebase/firebase.config"
-import { INFTFormInput, ProfileData } from "../interfaces";
+import { ProfileData } from "../interfaces";
 import { readProfileData } from "./profile";
 import { createNft } from "./nft";
 import { User } from "firebase/auth";
+import { CollectionFormData } from "../interfaces/nft-forms";
 
-export interface ICollection extends INFTFormInput {
+export interface ICollection extends CollectionFormData {
   id: string;
 }
 
-const createCollection = async (data: INFTFormInput, user: User) => {
+const createCollection = async (data: CollectionFormData, user: User) => {
     try {
         if(user){
             const profileData: ProfileData = await readProfileData(user)
@@ -29,7 +30,7 @@ const fetchAllCollections = async (): Promise<ICollection[]> => {
       const collections: ICollection[] = [];
       querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
-          collections.push({ id: doc.id, ...doc.data() as INFTFormInput });
+          collections.push({ id: doc.id, ...doc.data() as CollectionFormData });
       });
       return collections;
   } catch (error) {
@@ -45,7 +46,7 @@ const fetchAllCollectionsByUserUID = async (userId: string): Promise<ICollection
       const collections: ICollection[] = [];
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        collections.push({ id: doc.id, ...doc.data() as INFTFormInput });
+        collections.push({ id: doc.id, ...doc.data() as CollectionFormData });
       });
       return collections;
     } catch (error) {
@@ -75,7 +76,7 @@ const fetchCollectionById = async (
 
     // If the document exists, return it
     if (docSnapshot.exists()) {
-      return { id: docSnapshot.id, ...docSnapshot.data() as INFTFormInput };
+      return { id: docSnapshot.id, ...docSnapshot.data() as CollectionFormData };
     } else {
       // Document does not exist
       console.log(`No such document with ID ${collectionId} found!`);

@@ -3,7 +3,6 @@ import ItemsCard from '../../components/cards/dashboard-cards/ItemsCard';
 import React, { useEffect, useState } from 'react';
 import { ICollection, fetchAllCollectionsByUserUID } from '../../api/collection';
 import { useAuth } from '../../hooks/useAuth';
-import LoadingSpinner from '../loaders/LoadingSpinner';
 
 function Landing() {
     const router = useRouter();
@@ -52,8 +51,8 @@ function Landing() {
                         // Render your collection item card here
                         <ItemsCard 
                             key={collection.id} 
-                            title={`${collection.name} - INR ${collection.nft_base_price}`} 
-                            description={collection.description} 
+                            title={`${collection.CollectionName} - INR ${collection.CollectionTotalNumberOfNFTs}`} 
+                            description={collection.CollectionDescription} 
                             onClick={() => router.push(`/collections/${collection.id}`)}
                         />
                     ))

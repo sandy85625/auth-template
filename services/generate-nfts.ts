@@ -1,72 +1,89 @@
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { INFTFormInput, INFTMetadata } from "../interfaces";
+import { groupBy } from 'lodash';
+import { CollectionFormData, NFTMetadata } from "../interfaces/nft-forms";
+import { generateQRCode } from './qr-generator';
 import { storage } from "../firebase/firebase.config";
-import { generateQRCode } from "./qr-generator";
-import generateShortIds from "./generate-shortid";
-import { User } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { BASE_URL } from '../constants';
+import { DocumentReference } from "@firebase/firestore";
+import { User } from 'firebase/auth';
 
-const generateNfts = async (
-  externalUrl: string,
-  logoImage: string,
-  metadata: INFTMetadata,
-  user: User,
-  index: number
-): Promise<object> => {
-  try {
-    const blob = await generateQRCode(externalUrl, metadata.trait_class, logoImage);
-    const storageRef = ref(storage, `${user.uid}/image-${index}`);
-    await uploadBytes(storageRef, blob);
-    const downloadURL = await getDownloadURL(storageRef);
+type Trait = { trait_type: string; value: string | number; };
 
-    const nft = {
-      name: `${metadata.trait_class} #${index}`,
-      imageUrl: downloadURL,
-      externalUrl: externalUrl,
-      attributes: {
-        traitName: metadata.trait_name,
-        traitValue: metadata.trait_value,
-        traitType: metadata.trait_class
-      },
-    };
+async function generateNFTs(
+    form: CollectionFormData, 
+    docRefs: DocumentReference[], 
+    collectionId:string, 
+    logoImage: string, 
+    user: User
+    ): Promise<Map<DocumentReference, NFTMetadata>> {
+    const nfts: Map<DocumentReference, NFTMetadata> = new Map();
 
-    return nft;
-  } catch (error: any) {
-    throw new Error(`Error occured at NFT Generation: ${error.message}`);
-  }
-};
+    if (user == null) {
+        throw new Error(`User not present!`)
+    }
 
-const generateNftDataForDb = async (nftData: INFTFormInput, logoImage: string, user: User, collectionId: string) => {
-  let index = 0; // Initialize index
+    // Group attributes by trait type
+    const groupedAttributes = groupBy(form.CollectionAttributesList, 'trait_type');
+    let allCombinations: Trait[][] = [];
 
-  const totalNfts = await Promise.all(
-    nftData.nft_metadatas.flatMap(async (metadata) => {
-      // Generate short URLs for each NFT
-      const urls = generateShortIds(metadata.trait_count);
+    for (const traitType in groupedAttributes) {
+        const group = groupedAttributes[traitType];
 
-      // Generate NFTs and get an array of NFT objects
-      const nftObjects = await Promise.all(
-        urls.map(async (url) => {
-          // Increment the index and then pass to generateNfts
-          index++;
-          return generateNfts(url, logoImage, metadata, user, index);
-        })
-      );
+        // Convert 'percentage' fields to numbers
+        const groupWithNumbers = group.map(attr => ({...attr, percentage: Number(attr.percentage)}));
+        
+        if (allCombinations.length === 0) {
+            for (const attr of groupWithNumbers) {
+                allCombinations.push([{
+                    trait_type: attr.trait_type,
+                    value: attr.value
+                }]);
+            }
+        } else {
+            const newCombinations = [];
+            for (const attr of groupWithNumbers) {
+                for (const combination of allCombinations) {
+                    newCombinations.push([
+                        ...combination,
+                        {
+                            trait_type: attr.trait_type,
+                            value: attr.value
+                        }
+                    ]);
+                }
+            }
+            allCombinations = newCombinations;
+        }
+    }
 
-      // Add the collection ID and short URL to each NFT object
-      const nftDataForDb = nftObjects.map((nft, urlIndex) => ({
-        ...nft,
-        description: nftData.description,
-        basePrice: nftData.nft_base_price,
-        shortUrl: urls[urlIndex],
-        collectionId: collectionId, // Assuming nftData has the collectionId
-      }));
+    // Check we have enough unique combinations to meet the total number of NFTs
+    if (allCombinations.length < form.CollectionTotalNumberOfNFTs) {
+        throw new Error(`Not enough unique combinations of attributes to generate ${form.CollectionTotalNumberOfNFTs} NFTs.`);
+    }
 
-      // Return the array of NFT objects to be flat mapped
-      return nftDataForDb;
-    })
-  );
+    for (let i = 0; i < form.CollectionTotalNumberOfNFTs; i++) {
+        const index = Math.floor(Math.random() * allCombinations.length);
+        const attributes = allCombinations.splice(index, 1)[0];
 
-  return totalNfts.flat();
-};
+        const qrUrl = `${BASE_URL}/collections/${collectionId}/${docRefs[i].id}`
+        const blob = await generateQRCode(qrUrl, form.NFTClass, logoImage);
+        const storageRef = ref(storage, `${user.uid}/image-${i}`);
+        await uploadBytes(storageRef, blob);
+        const downloadURL = await getDownloadURL(storageRef);
 
-export default generateNftDataForDb;
+        const nft: NFTMetadata = {
+            name: `${form.NFTClass.toUpperCase()} CLASS NFT #${i+1}`,
+            description: `Part of the ${form.CollectionName} collection`,
+            image: downloadURL,
+            attributes: attributes,
+            basePrice: form.CollectionBasePrice,
+            currentPrice: form.CollectionBasePrice
+        };
+
+        nfts.set(docRefs[i], nft);
+    }
+
+    return nfts;
+}
+
+export default generateNFTs;

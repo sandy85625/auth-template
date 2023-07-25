@@ -4,7 +4,6 @@ import withAuth from '../hocs/withAuth';
 import { AUTH_EXCEPTED_PUBLIC_URLS } from '../constants';
 import ErrorPage from '../components/errors/ErrorPage';
 import Head from 'next/head';
-import Footer from '../components/Footer'
 
 function MyApp({ Component, pageProps }: AppProps) {
   try {
@@ -18,7 +17,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/logo.png" />
       </Head>
       {withAuth(Component, AUTH_EXCEPTED_PUBLIC_URLS)(pageProps)}
-      <Footer />
       </>
       )
   } catch (error: any) {

@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Navbar from '../../../components/navbars/DashboardNavbar';
 import NFTCard from '../../../components/cards/collections-nft-cards/NftCard';
-import { INFT } from '../../../interfaces';
 import { fetchNFTsByCollectionId } from '../../../api/nft';
 import { useAuth } from '../../../hooks/useAuth';
 import { fetchCollectionById } from '../../../api/collection';
-import Link from 'next/link';
+import { NFTMetadata } from '../../../interfaces/nft-forms';
 
 
 export default function Collections() {
   const router = useRouter();
   const { collectionId } = router.query;
-  const [nfts, setNfts] = useState<INFT[]>([]);
+  const [nfts, setNfts] = useState<NFTMetadata[]>([]);
   const { user } = useAuth();
   const [collectionName, setCollectionName]= useState<string>('')
   const [collectionDescription, setCollectionDescription]= useState<string>('')
+  const [collectionBasePrice, setCollectionBasePrice]= useState<number>(0)
 
   useEffect(() => {
     if (collectionId && user) {
@@ -26,28 +26,28 @@ export default function Collections() {
       fetchCollectionById(user.uid, collectionId as string)
         .then((item) => {
           if (item) {
-            setCollectionName(item.name);
-            setCollectionDescription(item.description)
+            setCollectionName(item.CollectionName);
+            setCollectionDescription(item.CollectionDescription)
+            setCollectionBasePrice(item.CollectionBasePrice)
           }
         })
         .catch(console.error);
     }
   }, [collectionId, user]);
+  
 
   return (
     <div>
       <Navbar />
-      <div>
-        <h2 className="text-2xl text-center my-4">{collectionName}</h2>
-        <h2 className="text-sm text-center my-4">{collectionDescription}</h2>
+      <div className="bg-gray-100 shadow rounded-lg p-6 m-4">
+        <h2 className="text-2xl text-center my-4 font-bold">{collectionName}</h2>
+        <p className="text-sm text-center text-gray-700 my-2">{collectionDescription}</p>
+        <p className="text-lg text-center font-semibold text-green-600 mt-2">Base Price: {collectionBasePrice} INR</p>
       </div>
-      <hr className="my-8 border-gray-300" />
-      <div className="flex flex-wrap justify-center">
+      <div className="bg-gray-100 shadow rounded-lg p-6 m-4 flex flex-wrap justify-center">
         {nfts.map((nft, index) => (
             <div key={index}>
-          <Link href={`/collections/${collectionId}/${nft.id}`}>
-            <NFTCard {...nft} />
-          </Link>
+            <NFTCard href={`/collections/${collectionId}/${nft.id}`} {...nft} />
           </div>
         ))}
       </div>

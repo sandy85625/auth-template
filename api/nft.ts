@@ -1,8 +1,8 @@
-import { addDoc, getDocs, collection, query, where, doc, getDoc } from "firebase/firestore";
+import { addDoc, getDocs, collection, query, where, doc, getDoc, setDoc } from "firebase/firestore";
 import { database } from "../firebase/firebase.config"
-import { INFT, INFTFormInput } from "../interfaces";
-import generateNftDataForDb from "../services/generate-nfts";
 import { User } from "firebase/auth";
+import { CollectionFormData, NFTMetadata } from "../interfaces/nft-forms";
+import generateNFTs from "../services/generate-nfts";
 
 /**
  * Function to generate NFTs and add them to the database
@@ -14,42 +14,44 @@ import { User } from "firebase/auth";
  * @returns {Promise<void>} - No return value
  */
 const createNft = async (
-  nftData: INFTFormInput,
+  form: CollectionFormData,
   logoImage: string,
   user: User,
   collectionId: string
 ) => {
   try {
-    // Generate the NFT data to be added to the database
-    const nftDataForDb = await generateNftDataForDb(nftData, logoImage, user, collectionId);
 
-    // Add each NFT to the database
-    const docRefs = await Promise.all(
-      nftDataForDb.map((nft) => addDoc(collection(database, "nfts", user.uid, collectionId), nft))
-    );
-    // Log the IDs of the written documents
-    docRefs.forEach((docRef) => console.log("Document written with ID: ", docRef.id));
+    if(user == null) {
+        throw new Error(`User not present!`);
+    }
 
+    // Create empty documents in the collection and store their references
+    const docRefs = [];
+    for(let i = 0; i < form.CollectionTotalNumberOfNFTs; i++) {
+        const docRef = await addDoc(collection(database, "nfts", user.uid, collectionId), {});
+        docRefs.push(docRef);
+    }
+    
+    // Generate NFT data and update the previously created documents
+    const nftDataForDb = await generateNFTs(form, docRefs, collectionId, logoImage, user);
+    
+    nftDataForDb.forEach(async (nftMetadata, docRef) => {
+      await setDoc(docRef, nftMetadata);
+  });
+    
   } catch (error: any) {
     console.error("Error adding document: ", error.message);
   }
 };
 
- const fetchNFTsByCollectionId = async (userId: string, collectionId: string): Promise<INFT[]> => {
+const fetchNFTsByCollectionId = async (userId: string, collectionId: string): Promise<NFTMetadata[]> => {
   try {
-    // Create a query against the collection of NFTs, filtering by collection ID
-    const q = query(
-      collection(database, 'nfts', userId, collectionId),
-      where('collectionId', '==', collectionId)
-    );
-
-    const querySnapshot = await getDocs(q);
-    const nfts: INFT[] = [];
+    const nftsRef = collection(database, 'nfts', userId, collectionId);
+    const querySnapshot = await getDocs(nftsRef);
+    const nfts: NFTMetadata[] = [];
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      nfts.push({ id: doc.id, ...doc.data() as INFT });
+      nfts.push({ id: doc.id, ...doc.data() as NFTMetadata });
     });
-
     return nfts;
   } catch (error) {
     console.error('Error fetching NFTs: ', error);
@@ -57,13 +59,14 @@ const createNft = async (
   }
 };
 
-const fetchNFTById = async (userId: string, collectionId: string, nftId: string): Promise<INFT | null> => {
+
+const fetchNFTByNFTId = async (userId: string, collectionId: string, nftId: string): Promise<NFTMetadata | null> => {
   try {
     const nftDoc = doc(database, 'nfts', userId, collectionId, nftId);
     const nftSnap = await getDoc(nftDoc);
 
     if (nftSnap.exists()) {
-      return { id: nftSnap.id, ...nftSnap.data() as INFT };
+      return { id: nftSnap.id, ...nftSnap.data() as NFTMetadata };
     } else {
       console.error('No NFT found with ID: ', nftId);
       return null;
@@ -77,5 +80,5 @@ const fetchNFTById = async (userId: string, collectionId: string, nftId: string)
 export { 
   createNft,
   fetchNFTsByCollectionId,
-  fetchNFTById
+  fetchNFTByNFTId
 }
