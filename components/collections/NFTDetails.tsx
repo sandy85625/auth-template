@@ -25,7 +25,7 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft }) => {
           <div className="mt-6">
             <h4 className="text-sm text-gray-500 uppercase tracking-wider">Attributes</h4>
             <div className="mt-2 space-y-1">
-              {nft.attributes.map((attribute, index) => (
+              {nft.attributes && nft.attributes.map((attribute, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <p className="mr-4 text-sm text-gray-700">{attribute.trait_type} :</p>
                   <p className="text-sm text-gray-700">{attribute.value.toString().toUpperCase()}</p>

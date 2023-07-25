@@ -7,38 +7,42 @@ import { useAuth } from '../../../hooks/useAuth';
 import { fetchCollectionById } from '../../../api/collection';
 import { NFTMetadata } from '../../../interfaces/nft-forms';
 
-
 export default function Collections() {
   const router = useRouter();
   const { collectionId } = router.query;
   const [nfts, setNfts] = useState<NFTMetadata[]>([]);
   const { user } = useAuth();
-  const [collectionName, setCollectionName]= useState<string>('')
-  const [collectionDescription, setCollectionDescription]= useState<string>('')
-  const [collectionBasePrice, setCollectionBasePrice]= useState<number>(0)
+  const [collectionName, setCollectionName]= useState<string>('');
+  const [collectionDescription, setCollectionDescription]= useState<string>('');
+  const [collectionBasePrice, setCollectionBasePrice]= useState<number>(0);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     if (collectionId && user) {
       fetchNFTsByCollectionId(user.uid, collectionId as string)
         .then(setNfts)
-        .catch(console.error);
+        .catch((error: Error) => setErrorMessage(error.message));
 
       fetchCollectionById(user.uid, collectionId as string)
         .then((item) => {
           if (item) {
             setCollectionName(item.CollectionName);
-            setCollectionDescription(item.CollectionDescription)
-            setCollectionBasePrice(item.CollectionBasePrice)
+            setCollectionDescription(item.CollectionDescription);
+            setCollectionBasePrice(item.CollectionBasePrice);
           }
         })
-        .catch(console.error);
+        .catch((error: Error) => setErrorMessage(error.message));
     }
   }, [collectionId, user]);
-  
 
   return (
     <div>
       <Navbar />
+      {errorMessage && (
+        <div className="alert alert-danger" role="alert">
+          {errorMessage}
+        </div>
+      )}
       <div className="bg-gray-100 shadow rounded-lg p-6 m-4">
         <h2 className="text-2xl text-center my-4 font-bold">{collectionName}</h2>
         <p className="text-sm text-center text-gray-700 my-2">{collectionDescription}</p>
@@ -46,7 +50,7 @@ export default function Collections() {
       </div>
       <div className="bg-gray-100 shadow rounded-lg p-6 m-4 flex flex-wrap justify-center">
         {nfts.map((nft, index) => (
-            <div key={index}>
+          <div key={index}>
             <NFTCard href={`/collections/${collectionId}/${nft.id}`} {...nft} />
           </div>
         ))}

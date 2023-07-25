@@ -11,16 +11,10 @@ export interface ICollection extends CollectionFormData {
 }
 
 const createCollection = async (data: CollectionFormData, user: User) => {
-    try {
-        if(user){
-            const profileData: ProfileData = await readProfileData(user)
-            const docRef = await addDoc(collection(database, "collections", user.uid, "userCollections"), data);
-            await createNft(data, profileData.photoURL, user, docRef.id)
-            console.log("Document written with ID: ", docRef.id);
-        }
-
-    } catch (error) {
-        console.error("Error adding document: ", error);
+    if(user){
+        const profileData: ProfileData = await readProfileData(user)
+        const docRef = await addDoc(collection(database, "collections", user.uid, "userCollections"), data);
+        await createNft(data, profileData.photoURL, user, docRef.id)
     }
 }
 
