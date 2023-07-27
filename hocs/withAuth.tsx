@@ -19,12 +19,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
           .catch(() => {
             setProfile(null);
           });
-      } else {
-        setAuthStatus('unauthorized');
       }
-    }, [user]);
-
-    useEffect(() => {
+      
       const isLoggedIn = !!user; 
 
       if (loading && !isException) {

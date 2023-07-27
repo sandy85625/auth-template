@@ -20,8 +20,6 @@ function UserLanding() {
                 setCollections(collectionsData);
             }
             getCollections();
-        } else {
-            router.push('/login')
         }
     }, [user, router, loading]);
 

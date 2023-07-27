@@ -1,18 +1,60 @@
+import { useState, useEffect } from "react";
 import { NFTMetadata } from "../../interfaces/nft-forms";
 import LoadingSpinner from "../loaders/LoadingSpinner";
+import { loadStripe } from "@stripe/stripe-js";
+import { useAuth } from "../../hooks/useAuth";
 
 interface NFTDetailsProps {
   nft: NFTMetadata;
 }
 
-export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft }) => {
-    if (!nft) {
-      return (
-        <div className="flex justify-center items-center min-h-screen">
-          <LoadingSpinner />
-        </div>
-      );
+export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
+  const [nft, setNft] = useState<NFTMetadata | null>(null);
+  const { user } = useAuth()
+
+  useEffect(() => {
+    setNft(propNft);
+  }, [propNft]);
+
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_PUBLISHABLE_KEY!)
+
+  const handleCheckout = async () => {
+    const stripe = await stripePromise;
+
+    const response = await fetch('/api/v1/checkout', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({nft: nft, email: user?.email})
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      // Handle any server-side errors here.
+      console.log('Error:', JSON.stringify(error, null, 2));
+      return;
     }
+
+    const checkoutSession = await response.json()
+    console.log(checkoutSession); // log the checkout session to see what it contains
+
+    const result: any = await stripe?.redirectToCheckout({
+      sessionId: checkoutSession.id
+    })
+
+    if(result.error){
+      alert('error! in stripe checkout!')
+    }
+  }
+
+  if (!nft) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
   
     return (
       <div className="my-4 w-full md:w-1/2 mx-auto flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden p-2 md:p-4">
@@ -39,7 +81,7 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft }) => {
             <p className="mt-1 text-lg text-green-600 font-semibold">{nft.basePrice}</p>
           </div>
           <div className="mt-4">
-            <button className="w-full py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200">Purchase</button>
+            <button onClick={handleCheckout} className="w-full py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200">Purchase</button>
           </div>
         </div>
       </div>

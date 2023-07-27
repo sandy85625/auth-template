@@ -1,4 +1,4 @@
-import { addDoc, getDocs, collection, query, where, doc, getDoc, setDoc, collectionGroup, QuerySnapshot, DocumentData } from "firebase/firestore";
+import { addDoc, getDocs, collection, query, where, doc, getDoc, setDoc,updateDoc, collectionGroup, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { database } from "../firebase/firebase.config"
 import { User } from "firebase/auth";
 import { CollectionFormData, NFTMetadata } from "../interfaces/nft-forms";
@@ -150,10 +150,36 @@ const fetchNFTByWalletId = async (walletId: string): Promise<NFTMetadata[] | nul
   }
 };
 
+const updateNFTWalletId = async (collectionId: string, nftId: string, newWalletId: string): Promise<void> => {
+  try {
+    // Perform the Collection Group query
+    const nftCollectionsGroup = collectionGroup(database, "nftCollection");
+    const q = query(nftCollectionsGroup, where('collectionId', '==', collectionId));
+
+    // Execute the query and get the result
+    const querySnapshot = await getDocs(q);
+
+    // Find the document with the matching ID
+    const matchingDoc = querySnapshot.docs.find(doc => doc.id === nftId);
+
+    if (matchingDoc) {
+      // If a matching document is found, update it
+      const nftDocRef = doc(database, matchingDoc.ref.path);
+      await updateDoc(nftDocRef, { walletId: newWalletId });
+    } else {
+      // If no matching document is found, log a message
+      console.log('No matching NFT found.');
+    }
+  } catch (error) {
+    console.error('Error updating NFT: ', error);
+  }
+};
+
 export { 
   createNft,
   fetchUserNFTsByCollectionId,
   fetchNFTsByCollectionId,
   fetchNFTByNFTId,
-  fetchNFTByWalletId
+  fetchNFTByWalletId,
+  updateNFTWalletId
 }
