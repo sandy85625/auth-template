@@ -17,6 +17,10 @@ export default function Collections() {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
+    if(!user){
+      router.push('/login')
+    }
+    
     if (collectionId && user) {
       fetchNFTsByCollectionId(collectionId as string)
         .then(setNfts)
