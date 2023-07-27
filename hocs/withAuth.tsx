@@ -16,37 +16,33 @@ const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = 
     useEffect(() => {
       // Execute this logic only on the client-side
       if (typeof window !== 'undefined') {
-        if (!loading && !user && !exceptions.includes(router.pathname)) {
-          router.push('/login');
-        }
         if (user) {
           readProfileData(user)
             .then(setProfile)
-            .catch((err) => {
-              router.push('/unauthorized'); // Redirect to an appropriate error page
+            .catch(() => {
+              // If profile data fetch fails, set it to null to indicate unauthorized access
+              setProfile(null);
             });
         }
       }
-    }, [user, loading, router, exceptions]); // Remove 'profile' from the dependency array
+    }, [user]);
 
-    // Check if the user has the 'admin' role before rendering the component
-    if (typeof window === 'undefined' && profile == null) {
-      return <LoadingSpinner />; // Return loading state on the server-side
+    // Check if the user is logged in and the path is not allowed
+    const isLoggedIn = !!user; // Convert user object to boolean
+    const isAllowedPath = exceptions.includes(router.pathname);
+
+    if (!isLoggedIn && !isAllowedPath) {
+      router.push('/login'); // Redirect to login page for unauthorized access
+      return <LoadingSpinner />; // Return null to prevent rendering the WrappedComponent
     }
 
-    if(profile !== null) {
-      if (profile.role !== 'admin' && (router.pathname === '/admin' || router.pathname.startsWith('/admin/'))) {
-        router.push('/unauthorized'); // Redirect to a page indicating unauthorized access
-        return <LoadingSpinner />; // Return null to prevent rendering the WrappedComponent
-      }
-    }
-    else{
-      router.push('/login')
+    // Check if the user has the 'admin' role for protected admin routes
+    if (profile?.role !== 'admin' && (router.pathname === '/admin' || router.pathname.startsWith('/admin/'))) {
+      router.push('/unauthorized'); // Redirect to a page indicating unauthorized access
+      return <LoadingSpinner />; // Return null to prevent rendering the WrappedComponent
     }
 
-    
-
-    if (loading || (!exceptions.includes(router.pathname) && !user)) {
+    if (loading) {
       return <LoadingSpinner />;
     }
 
