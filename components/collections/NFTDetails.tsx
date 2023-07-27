@@ -3,6 +3,9 @@ import { NFTMetadata } from "../../interfaces/nft-forms";
 import LoadingSpinner from "../loaders/LoadingSpinner";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../../hooks/useAuth";
+import { readProfileData } from "../../api/profile";
+import { ProfileData } from "../../interfaces";
+import { updateNFTWalletId } from "../../api/nft";
 
 interface NFTDetailsProps {
   nft: NFTMetadata;
@@ -10,9 +13,11 @@ interface NFTDetailsProps {
 
 export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
   const [nft, setNft] = useState<NFTMetadata | null>(null);
+  const [profile, setProfile] = useState<ProfileData | null>(null)
   const { user } = useAuth()
 
   useEffect(() => {
+    readProfileData(user!).then(setProfile).catch(console.error)
     setNft(propNft);
   }, [propNft]);
 
@@ -37,7 +42,6 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
     }
 
     const checkoutSession = await response.json()
-    console.log(checkoutSession); // log the checkout session to see what it contains
 
     const result: any = await stripe?.redirectToCheckout({
       sessionId: checkoutSession.id
@@ -45,6 +49,11 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
 
     if(result.error){
       alert('error! in stripe checkout!')
+      return;
+    }
+
+    if(profile && nft && nft.collectionId && nft.id){
+      await updateNFTWalletId(nft.collectionId, nft.id, profile.walletID)
     }
   }
 
