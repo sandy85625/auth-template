@@ -14,10 +14,6 @@ export default function NFTExpanded() {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
-    if(!user){
-      router.push('/login')
-    }
-    
     if (nftId && collectionId && user) {
       fetchNFTByNFTId(collectionId as string, nftId as string)
         .then(setNft)
