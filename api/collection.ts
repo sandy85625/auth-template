@@ -1,4 +1,4 @@
-import { addDoc, collection, getDoc, doc, getDocs, where, query, setDoc, collectionGroup, QuerySnapshot, DocumentData } from "firebase/firestore";
+import { addDoc, collection,updateDoc, getDoc, doc, getDocs, where, query, setDoc, collectionGroup, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { database } from "../firebase/firebase.config"
 import { ProfileData } from "../interfaces";
 import { readProfileData } from "./profile";
@@ -28,9 +28,8 @@ const createCollection = async (data: CollectionFormData, user: User) => {
       const docRef = await addDoc(collection(userCollectionRef, "userCollections"), data);
       
       await createNft(data, profileData.photoURL, user, docRef.id);
-    } catch (error) {
-      console.error("Error creating collection: ", error);
-      // Handle the error as needed
+    } catch (error: any) {
+      throw new Error(`Error: ${error.message}`)
     }
   }
 };
@@ -45,7 +44,6 @@ const fetchAllCollections = async (): Promise<ICollection[]> => {
       });
       return collections;
   } catch (error) {
-      console.error("Error fetching documents: ", error);
       return [];
   }
 }
@@ -55,7 +53,7 @@ const fetchCollectionsIfPublished = async (): Promise<ICollection[]> => {
     const collections: ICollection[] = [];
     // Perform the Collection Group query
     const userCollectionsGroup = collectionGroup(database, "userCollections");
-    const q = query(userCollectionsGroup, where("CollecionPublished", "==", true));
+    const q = query(userCollectionsGroup, where("CollectionPublished", "==", true));
 
     // Execute the query and get the result
     const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
@@ -67,9 +65,8 @@ const fetchCollectionsIfPublished = async (): Promise<ICollection[]> => {
     });
 
     return collections;
-  } catch (error) {
-    console.error("Error fetching collections: ", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error: ${error.message}`);
   }
 };
 
@@ -84,7 +81,6 @@ const fetchAllCollectionsByUserUID = async (userId: string): Promise<ICollection
       });
       return collections;
     } catch (error) {
-      console.error("Error fetching documents: ", error);
       return [];
     }
   };
@@ -117,15 +113,44 @@ const fetchAllCollectionsByUserUID = async (userId: string): Promise<ICollection
         return null;
       }
     } catch (error) {
-      console.error("Error fetching document: ", error);
       return null;
     }
   };
+
+  const markCollectionAsPublished = async (
+    collectionId: string
+  ): Promise<void> => {
+    try {
+      // Create a reference to the document to update
+      const userCollectionsGroup = collectionGroup(database, "userCollections");
+      const q = query(userCollectionsGroup);
+      const querySnapshot = await getDocs(q);
+  
+      // Find the document with the matching ID
+      const matchingDoc = querySnapshot.docs.find(doc => doc.id === collectionId);
+  
+      if (matchingDoc) {
+        console.log(matchingDoc.id);
+        
+        // If a matching document is found, update it
+        await updateDoc(matchingDoc.ref, {
+          CollectionPublished: true,
+        })
+        .catch((err) => {
+          throw new Error(`Error: ${err.message}`)
+        });
+      } 
+    } catch (error: any) {
+      throw new Error(`Error: ${error.message}`)
+    }
+  };
+  
 
 export {
     createCollection,
     fetchAllCollections,
     fetchAllCollectionsByUserUID,
     fetchCollectionById,
-    fetchCollectionsIfPublished
+    fetchCollectionsIfPublished,
+    markCollectionAsPublished
 }

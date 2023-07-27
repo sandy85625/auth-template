@@ -50,7 +50,7 @@ const CollectionForm = () => {
         try {
 
           const collection: CollectionFormInput = {
-            CollecionPublished: true,
+            CollectionPublished: false,
             CollectionName: data.CollectionName,
             CollectionDescription: data.CollectionDescription,
             CollectionBasePrice: data.CollectionBasePrice,

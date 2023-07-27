@@ -7,7 +7,7 @@ interface CollectionAttribute {
 }
 
 interface CollectionFormData {
-  CollecionPublished: boolean;
+  CollectionPublished: boolean;
   CollectionName: string;
   CollectionDescription: string;
   CollectionBasePrice: number;
