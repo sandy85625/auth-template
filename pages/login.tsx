@@ -95,7 +95,6 @@ export default function Login() {
               />
             </div>
           </div>
-
           <div className="flex items-center justify-between">
             <div className="text-sm">
               <Link href="/reset-password" className="font-medium text-indigo-600 hover:text-indigo-500">
@@ -103,7 +102,13 @@ export default function Login() {
               </Link>
             </div>
           </div>
-
+          <div className='flex items-center justify-between'>
+          <div className="text-sm">
+              <Link href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                New user? Register Now
+              </Link>
+            </div>
+          </div>
           <div>
             <button
               type="submit"
