@@ -8,14 +8,11 @@ import { ProfileData } from '../../interfaces';
 import LoadingSpinner from '../../components/loaders/LoadingSpinner';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { NFTMetadata } from '../../interfaces/nft-forms';
-import { fetchNFTByWalletId } from '../../api/nft';
 
 const Profile: NextPage = () => {
   const { user, logout } = useAuth();
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const router = useRouter();
-  const [collections, setCollections] = useState<NFTMetadata[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,11 +28,7 @@ const Profile: NextPage = () => {
 
     fetchData();
 
-    if(profileData){
-      fetchNFTByWalletId(profileData.walletID).then(setCollections).catch(console.error)
-    }
-
-  }, [user]);
+  }, [user, profileData]);
 
   if (!profileData) {
     return <LoadingSpinner />;
@@ -43,7 +36,6 @@ const Profile: NextPage = () => {
 
   return (
     <div className="flex flex-wrap bg-gradient-to-r from-blue-400 to-purple-500 min-h-screen">
-      {/* Sidebar */}
       <div className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 bg-white shadow-lg">
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800">My Profile</h2>
@@ -54,12 +46,9 @@ const Profile: NextPage = () => {
             <li>
               <Link href="/profile" className="text-gray-600 hover:text-blue-500">Settings</Link>
             </li>
-            {/* Add your other navigation links here */}
           </ul>
         </div>
       </div>
-
-      {/* Profile */}
       <div className="w-full sm:w-1/2 md:w-3/4 lg:w-4/5 p-8">
         <div className="flex flex-col items-center">
           <h1 className="text-4xl font-bold mb-5 text-white">Profile</h1>

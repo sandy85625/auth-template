@@ -29,13 +29,13 @@ function UserLanding() {
 
     return (
         <section className='m-4 bg-white rounded text-indigo-500 md:px-8 py-8'>
-            <div>
-                <h1 className="text-2xl font-bold mb-4">Published Collections</h1>
+            <div className='flex items-center justify-center'>
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Published Collections</h1>
             </div>
-            <div className="px-6 pb-8 md:px-2">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="px-4 sm:px-6 pb-8 md:px-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 {collections.length === 0 ? (
-                    <p className="col-span-3 text-center text-gray-200">No collections available!</p>
+                    <p className="col-span-full text-center text-gray-200">No collections available!</p>
                 ) : (
                     collections.map(collection => (
                         // Render your collection item card here
@@ -50,6 +50,7 @@ function UserLanding() {
                 </div>
             </div> 
         </section>
+
 
     )
 }
