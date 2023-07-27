@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 const LandingNavbar: React.FC = () => {
@@ -20,7 +21,7 @@ const LandingNavbar: React.FC = () => {
     <nav className="sticky top-0 z-50 flex items-center justify-between bg-gray-900 py-4 px-6">
       <div className="w-1/2 flex justify-center items-center">
         <Link href="/">
-            <img src="/logo.png" alt="Logo" width={100} height={25} />
+            <Image src="/logo.png" alt="Logo" width={100} height={25} />
         </Link>
       </div>
       <div className="w-1/2 flex justify-center items-center">

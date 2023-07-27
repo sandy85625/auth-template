@@ -48,7 +48,18 @@ const CollectionForm = () => {
       if(user) { 
         setIsLoading(true);
         try {
-          await createCollection(data, user);
+
+          const collection: CollectionFormInput = {
+            CollecionPublished: true,
+            CollectionName: data.CollectionName,
+            CollectionDescription: data.CollectionDescription,
+            CollectionBasePrice: data.CollectionBasePrice,
+            NFTClass: data.NFTClass,
+            CollectionTotalNumberOfNFTs: data.CollectionTotalNumberOfNFTs,
+            CollectionAttributesList: data.CollectionAttributesList,
+          };
+
+          await createCollection(collection, user);
           setSuccessMessage('Collection created successfully!');
         } catch (error: any) {
           setErrorMessage('Error creating collection');

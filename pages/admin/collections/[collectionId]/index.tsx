@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NFTCard from '../../../../components/cards/collections-nft-cards/NftCard';
-import { fetchNFTsByCollectionId } from '../../../../api/nft';
+import { fetchUserNFTsByCollectionId } from '../../../../api/nft';
 import { useAuth } from '../../../../hooks/useAuth';
 import { fetchCollectionById } from '../../../../api/collection';
 import { NFTMetadata } from '../../../../interfaces/nft-forms';
@@ -18,11 +18,11 @@ export default function Collections() {
 
   useEffect(() => {
     if (collectionId && user) {
-      fetchNFTsByCollectionId(user.uid, collectionId as string)
+      fetchUserNFTsByCollectionId(user.uid, collectionId as string)
         .then(setNfts)
         .catch((error: Error) => setErrorMessage(error.message));
 
-      fetchCollectionById(user.uid, collectionId as string)
+      fetchCollectionById(collectionId as string)
         .then((item) => {
           if (item) {
             setCollectionName(item.CollectionName);

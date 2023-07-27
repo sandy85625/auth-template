@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import ItemsCard from '../cards/dashboard-cards/ItemsCard';
 import React, { useEffect, useState } from 'react';
-import { ICollection, fetchAllCollectionsByUserUID } from '../../api/collection';
+import { ICollection, fetchCollectionsIfPublished } from '../../api/collection';
 import { useAuth } from '../../hooks/useAuth';
 
 function UserLanding() {
@@ -16,7 +16,7 @@ function UserLanding() {
 
         if(user !== null){
             const getCollections = async () => {
-                const collectionsData = await fetchAllCollectionsByUserUID(user.uid);
+                const collectionsData = await fetchCollectionsIfPublished();
                 setCollections(collectionsData);
             }
             getCollections();

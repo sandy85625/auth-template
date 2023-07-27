@@ -11,7 +11,7 @@ function Landing(props: Props) {
     const router = useRouter();
 
     const handleNewProgramClick = () => {
-        router.push('/collections/new')
+        router.push('/admin/collections/new')
       }
     
       const handleImportDataClick = () => {

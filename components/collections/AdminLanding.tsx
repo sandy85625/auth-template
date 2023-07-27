@@ -53,7 +53,7 @@ function AdminLanding() {
                             key={collection.id} 
                             title={`${collection.CollectionName} - INR ${collection.CollectionTotalNumberOfNFTs}`} 
                             description={collection.CollectionDescription} 
-                            onClick={() => router.push(`/collections/${collection.id}`)}
+                            onClick={() => router.push(`/admin/collections/${collection.id}`)}
                         />
                     ))
                 )}

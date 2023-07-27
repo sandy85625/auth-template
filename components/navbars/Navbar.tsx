@@ -11,26 +11,30 @@ const Navbar = () => {
   const [profile, setProfile] = useState<ProfileData | null>(null);
 
   useEffect(() => {
-    if (user) {
+    // Execute this logic only on the client-side
+    if (typeof window !== 'undefined' && user) {
       readProfileData(user)
         .then(data => setProfile(data))
         .catch(error => {
-          // Handle the error here, for example, log the error
-          console.error('Error fetching profile:', error);
+          setProfile(null);
         });
     }
   }, [user]);
 
+  // Check if the user is authenticated and the profile data has been fetched
+  const isLoggedIn = !!user;
+  const isProfileFetched = profile !== null;
+
   return (
     <div>
-      {profile?.role === 'admin' ? (
+      {isLoggedIn && isProfileFetched && profile?.role === 'admin' ? (
         // For authenticated users with the role 'admin'
         <AdminNavbar />
-      ) : profile?.role === 'user' ? (
+      ) : isLoggedIn && isProfileFetched && profile?.role === 'user' ? (
         // For authenticated users with the role 'user'
         <DashboardNavbar />
       ) : (
-        // For non-authenticated users
+        // For non-authenticated users or when profile data is still being fetched
         <LandingNavbar />
       )}
     </div>

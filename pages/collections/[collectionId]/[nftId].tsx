@@ -14,7 +14,7 @@ export default function NFTExpanded() {
 
   useEffect(() => {
     if (nftId && collectionId && user) {
-      fetchNFTByNFTId(user.uid, collectionId as string, nftId as string)
+      fetchNFTByNFTId(collectionId as string, nftId as string)
         .then(setNft)
         .catch((error: Error) => setErrorMessage(error.message));
     }

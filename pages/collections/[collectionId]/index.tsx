@@ -18,11 +18,11 @@ export default function Collections() {
 
   useEffect(() => {
     if (collectionId && user) {
-      fetchNFTsByCollectionId(user.uid, collectionId as string)
+      fetchNFTsByCollectionId(collectionId as string)
         .then(setNfts)
         .catch((error: Error) => setErrorMessage(error.message));
 
-      fetchCollectionById(user.uid, collectionId as string)
+      fetchCollectionById(collectionId as string)
         .then((item) => {
           if (item) {
             setCollectionName(item.CollectionName);

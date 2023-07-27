@@ -1,4 +1,4 @@
-import { addDoc, getDocs, collection, query, where, doc, getDoc, setDoc } from "firebase/firestore";
+import { addDoc, getDocs, collection, query, where, doc, getDoc, setDoc, collectionGroup, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { database } from "../firebase/firebase.config"
 import { User } from "firebase/auth";
 import { CollectionFormData, NFTMetadata } from "../interfaces/nft-forms";
@@ -20,31 +20,41 @@ const createNft = async (
   collectionId: string
 ) => {
   try {
-
-    if(user == null) {
-        throw new Error(`User not present!`);
+    if (!user || !user.uid) {
+      throw new Error("User not present or missing user ID!");
     }
 
-    // Create empty documents in the collection and store their references
+    // Get a reference to the user's collection document
+    const userCollectionRef = doc(database, "nfts", user.uid);
+
+    // Check if the user's collection document exists
+    const userCollectionSnapshot = await getDoc(userCollectionRef);
+
+    // If the user's collection document doesn't exist, create it first
+    if (!userCollectionSnapshot.exists()) {
+      await setDoc(userCollectionRef, {}); // You can set any initial data for the document if needed
+    }
+
+    // Create empty documents in the "nfts" subcollection and store their references
     const docRefs = [];
-    for(let i = 0; i < form.CollectionTotalNumberOfNFTs; i++) {
-        const docRef = await addDoc(collection(database, "nfts", user.uid, collectionId), {});
-        docRefs.push(docRef);
+    for (let i = 0; i < form.CollectionTotalNumberOfNFTs; i++) {
+      const docRef = await addDoc(collection(userCollectionRef, collectionId), {});
+      docRefs.push(docRef);
     }
-    
+
     // Generate NFT data and update the previously created documents
     const nftDataForDb = await generateNFTs(form, docRefs, collectionId, logoImage, user);
-    
+
     nftDataForDb.forEach(async (nftMetadata, docRef) => {
       await setDoc(docRef, nftMetadata);
-  });
-    
+    });
   } catch (error: any) {
     console.error("Error adding document: ", error.message);
   }
 };
 
-const fetchNFTsByCollectionId = async (userId: string, collectionId: string): Promise<NFTMetadata[]> => {
+
+const fetchUserNFTsByCollectionId = async (userId: string, collectionId: string): Promise<NFTMetadata[]> => {
   try {
     const nftsRef = collection(database, 'nfts', userId, collectionId);
     const querySnapshot = await getDocs(nftsRef);
@@ -59,16 +69,51 @@ const fetchNFTsByCollectionId = async (userId: string, collectionId: string): Pr
   }
 };
 
-
-const fetchNFTByNFTId = async (userId: string, collectionId: string, nftId: string): Promise<NFTMetadata | null> => {
+const fetchNFTsByCollectionId = async (collectionId: string): Promise<NFTMetadata[]> => {
   try {
-    const nftDoc = doc(database, 'nfts', userId, collectionId, nftId);
-    const nftSnap = await getDoc(nftDoc);
+    const nfts: NFTMetadata[] = [];
+    // Perform the Collection Group query
+    const nftCollectionsGroup = collectionGroup(database, collectionId);
+    const q = query(nftCollectionsGroup);
 
-    if (nftSnap.exists()) {
-      return { id: nftSnap.id, ...nftSnap.data() as NFTMetadata };
+    // Execute the query and get the result
+    const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
+
+    // Extract the documents' data from the query snapshot
+    querySnapshot.forEach((doc) => {
+      const nftData = doc.data() as NFTMetadata;
+      nfts.push({ ...nftData, id: doc.id });
+    });
+
+    return nfts;
+  } catch (error) {
+    console.error("Error fetching nfts: ", error);
+    throw error;
+  }
+};
+
+
+const fetchNFTByNFTId = async (collectionId: string, nftId: string): Promise<NFTMetadata | null> => {
+  try {
+    console.log(collectionId, nftId);
+    
+    // Perform the Collection Group query
+    const nftCollectionsGroup = collectionGroup(database, collectionId);
+    const q = query(nftCollectionsGroup);
+
+    // Fetch the documents
+    const querySnapshot = await getDocs(q);
+
+    // Find the document with the matching ID
+    const matchingDoc = querySnapshot.docs.find(doc => doc.id === nftId);    
+
+    if (matchingDoc) {
+      console.log(matchingDoc.id);
+
+      // If a matching document is found, return it
+      return { id: matchingDoc.id, ...matchingDoc.data() as NFTMetadata };
     } else {
-      console.error('No NFT found with ID: ', nftId);
+      // If no matching document is found, log a message and return null
       return null;
     }
   } catch (error) {
@@ -77,8 +122,10 @@ const fetchNFTByNFTId = async (userId: string, collectionId: string, nftId: stri
   }
 };
 
+
 export { 
   createNft,
+  fetchUserNFTsByCollectionId,
   fetchNFTsByCollectionId,
   fetchNFTByNFTId
 }
