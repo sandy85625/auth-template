@@ -1,8 +1,6 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import withAuth from '../hocs/withAuth';
-import { AUTH_EXCEPTED_PUBLIC_URLS } from '../constants';
-import ErrorPage from '../components/errors/ErrorPage';
 import Head from 'next/head';
 import Navbar from '../components/navbars/Navbar';
 import Footer from '../components/Footer';
@@ -21,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Navbar />
       </nav>
       <main className="overflow-auto h-screen">
-        {withAuth(Component, AUTH_EXCEPTED_PUBLIC_URLS)(pageProps)}
+        {withAuth(Component)(pageProps)}
       </main>
       <footer>
         <Footer />

@@ -4,14 +4,13 @@ import LoadingSpinner from '../components/loaders/LoadingSpinner';
 import { ProfileData } from '../interfaces';
 import { readProfileData } from '../api/profile';
 
-const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = []) => {
+const withAuth = (WrappedComponent: React.ComponentType) => {
   const AuthenticatedComponent: React.FC = (props) => {
-    const { user, loading } = useAuth();
+    const { user, loading, isException } = useAuth();
     const [profile, setProfile] = useState<ProfileData | null>(null);
     const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthorized'>('loading');
-  
+
     useEffect(() => {
-      // Fetch the profile data only if the user is authenticated
       if (user) {
         readProfileData(user)
           .then(setProfile)
@@ -25,14 +24,12 @@ const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = 
 
     useEffect(() => {
       const isLoggedIn = !!user; 
-      const isAllowedPath = exceptions.includes(window.location.pathname);
-  
-      if (loading) {
+
+      if (loading && !isException) {
         return;
       }
 
-      // If we are on an exception route, we don't care about auth state
-      if (isAllowedPath) {
+      if (isException) {
         setAuthStatus('authenticated');
         return;
       }
@@ -44,7 +41,7 @@ const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = 
       } else {
         setAuthStatus('authenticated');
       }
-    }, [user, loading, profile, exceptions]);
+    }, [user, loading, profile, isException]);
 
     if (authStatus === 'loading') {
       return <LoadingSpinner />;
@@ -59,6 +56,7 @@ const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = 
 
   return AuthenticatedComponent;
 };
+
 
 
 export default withAuth;
