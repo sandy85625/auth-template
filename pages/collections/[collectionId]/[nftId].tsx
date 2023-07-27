@@ -4,6 +4,7 @@ import { fetchNFTByNFTId } from '../../../api/nft';
 import { useAuth } from '../../../hooks/useAuth';
 import { NFTDetails } from '../../../components/collections/NFTDetails';
 import { NFTMetadata } from '../../../interfaces/nft-forms';
+import LoadingSpinner from '../../../components/loaders/LoadingSpinner';
 
 export default function NFTExpanded() {
   const router = useRouter();
@@ -22,18 +23,16 @@ export default function NFTExpanded() {
   
 
   return (
-    <div className="bg-gray-300 min-h-screen">
+    <div className="min-h-screen bg-blue-400 p-4 md:p-8">
       {errorMessage && (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
         </div>
       )}
       {nft ? (
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <NFTDetails nft={nft} />
-        </div>
       ) : (
-        <p className="text-center py-6">Loading...</p>
+        <LoadingSpinner />
       )}
     </div>
   );

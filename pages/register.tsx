@@ -76,29 +76,29 @@ export default function Register() {
 
   return (
     <>
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign up for an account
-          </h2>
-        </div>
-        <div className="flex items-center justify-center">
-          <input
-            id="register-as-business"
-            name="register-as-business"
-            type="checkbox"
-            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-            checked={isBusiness}
-            onChange={(e) => setIsBusiness(e.target.checked)}
-          />
-          <label htmlFor="register-as-business" className="ml-2 block text-sm text-gray-900">
-            Register as Business
-          </label>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <input type="hidden" name="remember" value="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-md w-full space-y-8 bg-white p-6 rounded shadow-md">
+      <div>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Sign up for an account
+        </h2>
+      </div>
+      <div className="flex items-center justify-center">
+        <input
+          id="register-as-business"
+          name="register-as-business"
+          type="checkbox"
+          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          checked={isBusiness}
+          onChange={(e) => setIsBusiness(e.target.checked)}
+        />
+        <label htmlFor="register-as-business" className="ml-2 block text-sm text-gray-900">
+          Register as Business
+        </label>
+      </div>
+      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <input type="hidden" name="remember" value="true" />
+        <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="name" className="sr-only">
                 Full Name
@@ -175,22 +175,24 @@ export default function Register() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
-          </div>
+            </div>
 
           <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Sign up
+              <button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Sign up
+              </button>
+            </div>
+            </form>
+            <div>
+            <button onClick={googleSignIn} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+              Sign in with Google
             </button>
           </div>
-          </form>
+        </div>
       </div>
-      <div>
-          <button onClick={googleSignIn}>Sign in with Google</button>
-      </div>
-    </div>
     </>
   );
   } 

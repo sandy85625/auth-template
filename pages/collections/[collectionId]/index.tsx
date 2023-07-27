@@ -35,20 +35,20 @@ export default function Collections() {
   }, [collectionId, user]);
 
   return (
-    <div>
+    <div className="bg-blue-200 p-2 md:p-4">
       {errorMessage && (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
         </div>
       )}
-      <div className="bg-gray-100 shadow rounded-lg p-6 m-4">
-        <h2 className="text-2xl text-center my-4 font-bold">{collectionName}</h2>
-        <p className="text-sm text-center text-gray-700 my-2">{collectionDescription}</p>
+      <div className="bg-white shadow rounded-lg p-4 md:p-6 my-2 md:m-4">
+        <h2 className="text-2xl text-center my-4 font-bold text-blue-800">{collectionName}</h2>
+        <p className="text-sm text-center text-blue-700 my-2">{collectionDescription}</p>
         <p className="text-lg text-center font-semibold text-green-600 mt-2">Base Price: {collectionBasePrice} INR</p>
       </div>
-      <div className="bg-gray-100 shadow rounded-lg p-6 m-4 flex flex-wrap justify-center">
+      <div className="bg-white shadow rounded-lg p-4 md:p-6 my-2 md:m-4 flex flex-wrap justify-center">
         {nfts.map((nft, index) => (
-          <div key={index}>
+          <div key={index} className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-2">
             <NFTCard href={`/collections/${collectionId}/${nft.id}`} {...nft} />
           </div>
         ))}

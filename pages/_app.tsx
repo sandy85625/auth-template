@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <>
       <Head>
         <title>Tickets App</title>
-        <meta name="description" content="A platform for creating loyality programs for businesses." />
+        <meta name="description" content="A platform for creating loyality program." />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta charSet="utf-8" />
         <link rel="icon" href="/logo.png" />
@@ -23,7 +23,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <main className="overflow-auto h-screen">
         {withAuth(Component, AUTH_EXCEPTED_PUBLIC_URLS)(pageProps)}
       </main>
-      <Footer />
+      <footer>
+        <Footer />
+      </footer>
       </>
     );
 }

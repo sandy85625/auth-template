@@ -14,8 +14,6 @@ export default function Dashboard() {
 
   if (loading || !user) return <LoadingSpinner />;
   return (
-    <div>
       <Landing user={user} />
-    </div>
   );
 }
