@@ -23,6 +23,8 @@ interface NFTMetadataAttribute {
 
 interface NFTMetadata {
   id?:string;
+  ownerId: string;
+  collectionId: string;
   name: string;
   description: string;
   basePrice: number;

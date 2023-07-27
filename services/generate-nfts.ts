@@ -6,6 +6,8 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { BASE_URL } from '../constants';
 import { DocumentReference } from "@firebase/firestore";
 import { User } from 'firebase/auth';
+import { readProfileData } from '../api/profile';
+import { ProfileData } from '../interfaces';
 
 type Trait = { trait_type: string; value: string | number; };
 
@@ -21,6 +23,8 @@ async function generateNFTs(
     if (user == null) {
         throw new Error(`User not present!`)
     }
+
+    const profile: ProfileData = await readProfileData(user);
 
     // Group attributes by trait type
     const groupedAttributes = groupBy(form.CollectionAttributesList, 'trait_type');
@@ -74,6 +78,8 @@ async function generateNFTs(
         const nft: NFTMetadata = {
             name: `${form.NFTClass.toUpperCase()} CLASS NFT #${i+1}`,
             description: `Part of the ${form.CollectionName} collection`,
+            ownerId: profile.walletID,
+            collectionId: collectionId,
             image: downloadURL,
             attributes: attributes,
             basePrice: form.CollectionBasePrice,

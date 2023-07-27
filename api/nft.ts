@@ -95,8 +95,6 @@ const fetchNFTsByCollectionId = async (collectionId: string): Promise<NFTMetadat
 
 const fetchNFTByNFTId = async (collectionId: string, nftId: string): Promise<NFTMetadata | null> => {
   try {
-    console.log(collectionId, nftId);
-    
     // Perform the Collection Group query
     const nftCollectionsGroup = collectionGroup(database, collectionId);
     const q = query(nftCollectionsGroup);
@@ -108,7 +106,6 @@ const fetchNFTByNFTId = async (collectionId: string, nftId: string): Promise<NFT
     const matchingDoc = querySnapshot.docs.find(doc => doc.id === nftId);    
 
     if (matchingDoc) {
-      console.log(matchingDoc.id);
 
       // If a matching document is found, return it
       return { id: matchingDoc.id, ...matchingDoc.data() as NFTMetadata };
@@ -122,10 +119,39 @@ const fetchNFTByNFTId = async (collectionId: string, nftId: string): Promise<NFT
   }
 };
 
+const fetchNFTByWalletId = async (walletId: string): Promise<NFTMetadata[] | null> => {
+  try {
+    // Perform the Collection Group query on the 'nfts' collection
+    const nftCollectionsGroup = collectionGroup(database, 'nfts');
+
+    // Add a where clause to find documents where walletId matches
+    const q = query(nftCollectionsGroup, where('walletId', '==', walletId));
+
+    // Fetch the documents
+    const querySnapshot = await getDocs(q);
+
+    // If no matching documents are found, log a message and return null
+    if (querySnapshot.empty) {
+      return null;
+    }
+
+    // Map the documents into an array of NFTMetadata
+    const matchingDocs: NFTMetadata[] = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as NFTMetadata }));
+
+    // Return the array of matching NFTMetadata
+    return matchingDocs;
+  } catch (error) {
+    console.error('Error fetching NFT: ', error);
+    return null;
+  }
+};
+
+
 
 export { 
   createNft,
   fetchUserNFTsByCollectionId,
   fetchNFTsByCollectionId,
-  fetchNFTByNFTId
+  fetchNFTByNFTId,
+  fetchNFTByWalletId
 }
