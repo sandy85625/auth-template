@@ -5,11 +5,16 @@ import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/router';
 
 const linkData = [
-    { href: '/collections', label: 'Collections', description: 'All Collections', status: true },
-    { href: '/trending', label: 'Trending', description: 'Trending Collections', status: true  },
+    { href: '/admin', label: 'Admin', description: 'Admin Dashboard', status: true },
+    { href: '/collections', label: 'Published', description: 'Live Collections', status: true },
+    { href: '/admin/collections', label: 'Collections', description: 'Create new collection', status: true },
+    { href: '/admin/datasets', label: 'Datasets', description: 'View/Add datasets', status: true  },
+    { href: '/admin/analytics', label: 'Analytics', description: 'Not available at the moment!', status: true  },
+    { href: '/admin/reports', label: 'Reports', description: 'Not available at the moment!', status: true  },
+    { href: '/admin/settings', label: 'Settings', description: 'Not available at the moment!', status: false  },
   ];
 
-const DashboardNavbar: React.FC = () => {
+const AdminNavbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user, logout } = useAuth();
   const router = useRouter();
@@ -81,4 +86,4 @@ const DashboardNavbar: React.FC = () => {
   );
 };
 
-export default DashboardNavbar;
+export default AdminNavbar;

@@ -6,6 +6,7 @@ interface ProfileDataImplementation {
     email: string;
     phone: string;
     photoURL: string;
+    role: string;
     walletID: string;
     walletPrivateKey: string;
     walletMnemonicPhrase: string;

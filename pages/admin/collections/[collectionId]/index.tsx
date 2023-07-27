@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import NFTCard from '../../../components/cards/collections-nft-cards/NftCard';
-import { fetchNFTsByCollectionId } from '../../../api/nft';
-import { useAuth } from '../../../hooks/useAuth';
-import { fetchCollectionById } from '../../../api/collection';
-import { NFTMetadata } from '../../../interfaces/nft-forms';
+import NFTCard from '../../../../components/cards/collections-nft-cards/NftCard';
+import { fetchNFTsByCollectionId } from '../../../../api/nft';
+import { useAuth } from '../../../../hooks/useAuth';
+import { fetchCollectionById } from '../../../../api/collection';
+import { NFTMetadata } from '../../../../interfaces/nft-forms';
 
 export default function Collections() {
   const router = useRouter();

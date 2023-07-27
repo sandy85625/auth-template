@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/useAuth';
 import { readProfileData } from '../api/profile';
 import Image from 'next/image';
 import ProfileField from '../components/fields/profile-fields/ProfileFields';
-import Navbar from '../components/navbars/DashboardNavbar';
 import { ProfileData } from '../interfaces';
 import LoadingSpinner from '../components/loaders/LoadingSpinner';
 import { NextPage } from 'next';
@@ -35,7 +34,6 @@ const Profile: NextPage = () => {
 
     return (
     <>
-      <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
       <h1 className="text-4xl font-bold mb-5 text-gray-600">Profile</h1>
       <div className="mb-4">

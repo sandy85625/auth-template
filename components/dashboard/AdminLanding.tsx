@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { User } from 'firebase/auth';
-import ItemsCard from '../../components/cards/dashboard-cards/ItemsCard';
+import ItemsCard from '../cards/dashboard-cards/ItemsCard';
 import React from 'react';
 
 type Props = {

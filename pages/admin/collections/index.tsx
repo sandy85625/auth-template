@@ -1,4 +1,4 @@
-import Landing from '../../components/collections/UserLanding';
+import Landing from '../../../components/collections/AdminLanding';
 
 export default function Collections() {
 

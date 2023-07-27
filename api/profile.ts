@@ -28,7 +28,8 @@ const readProfileData = async (user: User): Promise<any> => {
     email: string, 
     phone: string,
     photoURL: string,
-    user: User
+    user: User,
+    role: string
     ) => {
   
     if (user) {
@@ -41,6 +42,7 @@ const readProfileData = async (user: User): Promise<any> => {
           email,
           phone,
           photoURL,
+          role,
           walletID: id,
           walletPrivateKey: privateKey,
           walletMnemonicPhrase: mnemonic,

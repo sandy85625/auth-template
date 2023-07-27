@@ -2,8 +2,7 @@ import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvide
 import { app } from '../firebase/firebase.config';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
-import { saveProfileData } from '../api/profile';
-import LandingNavbar from '../components/navbars/LandingNavbar';
+import { readProfileData } from '../api/profile';
 import Link from 'next/link';
 
 export default function Login() {
@@ -16,8 +15,14 @@ export default function Login() {
 
     try {
       const auth = getAuth(app);
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user
+      const profile = await readProfileData(user)
+      if(profile.role == 'admin'){
+        router.push('/admin')
+      } else {
       router.push('/dashboard');
+      }
     } catch (error: any) {
       alert(error.message);
     }
@@ -31,14 +36,12 @@ export default function Login() {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       if (user) {
-        await saveProfileData(
-          user.displayName || '', 
-          user.email || '', 
-          user.phoneNumber || '', 
-          user.photoURL || '',
-          user
-        );
+        const profile = await readProfileData(user)
+        if(profile.role == 'admin'){
+          router.push('/admin')
+        } else {
         router.push('/dashboard');
+        }
       } else {
         throw new Error('No user found');
       }
@@ -49,8 +52,6 @@ export default function Login() {
 
   return (
     <>
-    <LandingNavbar />
-    
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>

@@ -3,8 +3,6 @@ import { app } from '../firebase/firebase.config';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { saveProfileData } from '../api/profile';
-import LandingNavbar from '../components/navbars/LandingNavbar';
-
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -13,6 +11,7 @@ export default function Register() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const router = useRouter();
+  const [isBusiness, setIsBusiness] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,18 +19,22 @@ export default function Register() {
       alert('Passwords do not match');
       return;
     }
-
-    const auth = getAuth(app);
   
+    const auth = getAuth(app);
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
+  
+      // Assign user role based on "isBusiness" state
+      const role = isBusiness ? 'admin' : 'user';
+  
       await sendEmailVerification(user);
       await saveProfileData(
         name, 
         email, 
         phone,
         '',
-        user
+        user,
+        role
       );
       router.push('/login');
     } catch (error: any) {
@@ -47,14 +50,22 @@ export default function Register() {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       if (user) {
+        // Assign user role based on "isBusiness" state
+        const role = isBusiness ? 'admin' : 'user';
+
         await saveProfileData(
           user.displayName || '', 
           user.email || '', 
           user.phoneNumber || '', 
           user.photoURL || '',
-          user
+          user,
+          role
         );
+        if(role == 'admin'){
+          router.push('/admin')
+        } else {
         router.push('/dashboard');
+        }
       } else {
         throw new Error('No user found');
       }
@@ -65,13 +76,25 @@ export default function Register() {
 
   return (
     <>
-    <LandingNavbar />
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign up for an account
           </h2>
+        </div>
+        <div className="flex items-center justify-center">
+          <input
+            id="register-as-business"
+            name="register-as-business"
+            type="checkbox"
+            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            checked={isBusiness}
+            onChange={(e) => setIsBusiness(e.target.checked)}
+          />
+          <label htmlFor="register-as-business" className="ml-2 block text-sm text-gray-900">
+            Register as Business
+          </label>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" value="true" />

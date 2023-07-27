@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { fetchNFTByNFTId } from '../../../api/nft';
-import { useAuth } from '../../../hooks/useAuth';
-import { NFTDetails } from '../../../components/collections/NFTDetails';
-import { NFTMetadata } from '../../../interfaces/nft-forms';
+import { fetchNFTByNFTId } from '../../../../api/nft';
+import { useAuth } from '../../../../hooks/useAuth';
+import { NFTDetails } from '../../../../components/collections/NFTDetails';
+import { NFTMetadata } from '../../../../interfaces/nft-forms';
 
 export default function NFTExpanded() {
   const router = useRouter();

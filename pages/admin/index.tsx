@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import LoadingSpinner from '../../components/loaders/LoadingSpinner';
-import Landing from '../../components/dashboard/UserLanding';
+import Landing from '../../components/dashboard/AdminLanding';
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
