@@ -41,7 +41,7 @@ const withAuth = (WrappedComponent: React.ComponentType, exceptions: string[] = 
       }
     }
     else{
-      return <LoadingSpinner />
+      router.push('/login')
     }
 
     
