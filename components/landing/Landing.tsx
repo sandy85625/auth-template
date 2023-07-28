@@ -19,7 +19,7 @@ export default function Landing() {
         <p className="my-6 text-lg md:text-xl text-gray-600">A digital platform for creating loyalty programs!</p>
       </main>
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 px-4 md:px-10 mb-8">
-        <button onClick={() => router.push('/')}
+        <button onClick={() => router.push('https://l4tpnnnmy7q.typeform.com/to/lyL9jTSc')}
           className="w-full md:w-auto py-4 px-8 text-lg md:text-xl text-white bg-blue-600 rounded-xl shadow-lg hover:bg-blue-700 transition-colors duration-200">
           Book a Demo
         </button>
