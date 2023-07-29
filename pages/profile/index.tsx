@@ -44,6 +44,11 @@ const Profile: NextPage = () => {
               <Link href="/profile/collections" className="text-gray-600 hover:text-blue-500">My Collections</Link>
             </li>
             <li>
+              <Link href="/profile/notifications">
+                <div className="text-gray-600 hover:text-blue-500">Notifications</div>
+              </Link>
+            </li>
+            <li>
               <Link href="/profile" className="text-gray-600 hover:text-blue-500">Settings</Link>
             </li>
           </ul>
