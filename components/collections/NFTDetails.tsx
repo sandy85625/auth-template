@@ -17,7 +17,7 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
   const { user } = useAuth()
 
   useEffect(() => {
-    readProfileData(user!).then(setProfile).catch(console.error)
+    if(user) readProfileData(user).then(setProfile).catch(console.error)
     setNft(propNft);
   }, [propNft]);
 

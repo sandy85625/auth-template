@@ -35,7 +35,7 @@ const AdminNavbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between bg-gray-900 py-4 px-6">
         <div className="w-1/2 flex items-center">
-            <Link href='/dashboard'>
+            <Link href='/home'>
                 <Image src="/logo.png" alt="Logo" width={100} height={25} />
             </Link>
             <div className="flex flex-row ml-4 space-x-4">

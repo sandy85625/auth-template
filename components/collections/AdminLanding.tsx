@@ -3,6 +3,7 @@ import ItemsCard from '../cards/dashboard-cards/ItemsCard';
 import React, { useEffect, useState } from 'react';
 import { ICollection, fetchAllCollectionsByUserUID } from '../../api/collection';
 import { useAuth } from '../../hooks/useAuth';
+import CollectionCard from '../cards/dashboard-cards/CollectionCard';
 
 function AdminLanding() {
     const router = useRouter();
@@ -47,10 +48,11 @@ function AdminLanding() {
                 ) : (
                     collections.map(collection => (
                         // Render your collection item card here
-                        <ItemsCard 
+                        <CollectionCard 
                             key={collection.id} 
-                            title={`${collection.CollectionName} - INR ${collection.CollectionTotalNumberOfNFTs}`} 
+                            title={`${collection.CollectionName}`} 
                             description={collection.CollectionDescription} 
+                            price={collection.CollectionBasePrice}
                             onClick={() => router.push(`/admin/collections/${collection.id}`)}
                         />
                     ))

@@ -64,7 +64,7 @@ export default function Register() {
         if(role == 'admin'){
           router.push('/admin')
         } else {
-        router.push('/dashboard');
+        router.push('/home');
         }
       } else {
         throw new Error('No user found');

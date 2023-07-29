@@ -35,7 +35,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
       if (!isLoggedIn) {
         setAuthStatus('unauthorized');
       } else if (isLoggedIn && profile?.role !== 'admin' && (window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin/'))) {
-        setAuthStatus('unauthorized');
+        router.push('/home');
       } else {
         setAuthStatus('authenticated');
       }

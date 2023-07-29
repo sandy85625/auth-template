@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/router';
 
 const linkData = [
+  { href: '/home', label: 'Home', description: 'Home Page', status: true },
   { href: '/collections', label: 'Collections', description: 'All Collections', status: true },
   { href: '/trending', label: 'Trending', description: 'Trending Collections', status: true  },
 ];
@@ -35,7 +36,7 @@ const DashboardNavbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white py-4 px-6 md:flex-row md:justify-between">
       <div className="flex items-center justify-between md:justify-start w-full md:w-auto">
-        <Link href="/dashboard">
+        <Link href="/home">
           <Image src="/logo.png" alt="Logo" width={100} height={25} />
         </Link>
         <div className={`md:hidden ${isMobileMenuOpen ? 'flex' : 'hidden'} flex-col space-y-4 py-2 absolute w-full left-0 top-full bg-gray-800`}>

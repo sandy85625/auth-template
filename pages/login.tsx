@@ -21,7 +21,7 @@ export default function Login() {
       if(profile.role == 'admin'){
         router.push('/admin')
       } else {
-      router.push('/dashboard');
+      router.push('/home');
       }
     } catch (error: any) {
       alert(error.message);
@@ -40,7 +40,7 @@ export default function Login() {
         if(profile.role == 'admin'){
           router.push('/admin')
         } else {
-        router.push('/dashboard');
+        router.push('/home');
         }
       } else {
         throw new Error('No user found');

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
-import ItemsCard from '../cards/dashboard-cards/ItemsCard';
 import React, { useEffect, useState } from 'react';
 import { ICollection, fetchCollectionsIfPublished } from '../../api/collection';
 import { useAuth } from '../../hooks/useAuth';
+import CollectionCard from '../cards/dashboard-cards/CollectionCard';
 
 function UserLanding() {
     const router = useRouter();
@@ -37,10 +37,11 @@ function UserLanding() {
                 ) : (
                     collections.map(collection => (
                         // Render your collection item card here
-                        <ItemsCard 
+                        <CollectionCard 
                             key={collection.id} 
-                            title={`${collection.CollectionName} - INR ${collection.CollectionTotalNumberOfNFTs}`} 
+                            title={`${collection.CollectionName}`} 
                             description={collection.CollectionDescription} 
+                            price={collection.CollectionBasePrice}
                             onClick={() => router.push(`/collections/${collection.id}`)}
                         />
                     ))
