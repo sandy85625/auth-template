@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router';
 import { User } from 'firebase/auth';
-import ItemsCard from '../cards/dashboard-cards/ItemsCard';
 import React from 'react';
 import UserLanding from '../collections/UserLanding';
 
@@ -9,7 +7,6 @@ type Props = {
 }
 
 function Landing(props: Props) {
-    const router = useRouter();
   
     return (
         <section className="min-h-full bg-gradient-to-br from-blue-500 via-purple-500 to-red-500 text-white">
@@ -20,7 +17,6 @@ function Landing(props: Props) {
                 <UserLanding />
             </div>
         </section>
-
   )
 }
 
