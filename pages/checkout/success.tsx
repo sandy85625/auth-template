@@ -9,7 +9,7 @@ const Success: React.FC = () => {
         <p className="text-gray-600 mb-8">Your payment was successful.</p>
         <Link href="/">
           <div className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg">
-            Explore more rewards! Let's go home!
+            Explore more rewards! Let&apos;s go home!
           </div>
         </Link>
       </div>
