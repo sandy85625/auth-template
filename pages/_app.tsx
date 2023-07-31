@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <nav>
         <Navbar />
       </nav>
-      <main className="overflow-auto h-screen">
+      <main className="overflow-auto">
         {withAuth(Component)(pageProps)}
       </main>
       <footer>
