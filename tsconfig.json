@@ -21,6 +21,7 @@
   },
   "include": [
     "next-env.d.ts",
+    "razorpay.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { NFTMetadata } from "../../interfaces/nft-forms";
 import LoadingSpinner from "../loaders/LoadingSpinner";
-import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../../hooks/useAuth";
 import { readProfileData } from "../../api/profile";
 import { ProfileData } from "../../interfaces";
 import { updateNFTWalletId } from "../../api/nft";
+import PaymentForm from "../razorpay";
 
 interface NFTDetailsProps {
   nft: NFTMetadata;
@@ -21,43 +21,15 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
     setNft(propNft);
   }, [propNft]);
 
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_PUBLISHABLE_KEY!)
-
-  const handleCheckout = async () => {
-    const stripe = await stripePromise;
-
-    const response = await fetch('/api/v1/checkout', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({nft: nft, email: user?.email})
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      // Handle any server-side errors here.
-      console.log('Error:', JSON.stringify(error, null, 2));
-      return;
-    }
-
-    const checkoutSession = await response.json()
-
-    const result: any = await stripe?.redirectToCheckout({
-      sessionId: checkoutSession.id
-    })
-
-    if(result.error){
-      alert('error! in stripe checkout!')
-      return;
-    }
-
-    if(profile && nft && nft.collectionId && nft.id){
-      await updateNFTWalletId(nft.collectionId, nft.id, profile.walletID)
-    }
-  }
-
   if (!nft) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+  
+  if (!profile) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <LoadingSpinner />
@@ -90,7 +62,7 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
             <p className="mt-1 text-lg text-green-600 font-semibold">{nft.basePrice}</p>
           </div>
           <div className="mt-4">
-            <button onClick={handleCheckout} className="w-full py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200">Purchase</button>
+            <PaymentForm nft={nft} profile={profile}/>
           </div>
         </div>
       </div>
