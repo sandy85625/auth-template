@@ -165,7 +165,32 @@ const updateNFTWalletId = async (collectionId: string, nftId: string, newWalletI
     if (matchingDoc) {
       // If a matching document is found, update it
       const nftDocRef = doc(database, matchingDoc.ref.path);
-      await updateDoc(nftDocRef, { ownerId: newWalletId });
+      await updateDoc(nftDocRef, { ownerId: newWalletId, isOnSale: false });
+    } else {
+      // If no matching document is found, log a message
+      console.log('No matching NFT found.');
+    }
+  } catch (error) {
+    console.error('Error updating NFT: ', error);
+  }
+};
+
+const reupdateIsOnSale = async (collectionId: string, nftId: string, publishState: boolean): Promise<void> => {
+  try {
+    // Perform the Collection Group query
+    const nftCollectionsGroup = collectionGroup(database, "nftCollection");
+    const q = query(nftCollectionsGroup, where('collectionId', '==', collectionId));
+
+    // Execute the query and get the result
+    const querySnapshot = await getDocs(q);
+
+    // Find the document with the matching ID
+    const matchingDoc = querySnapshot.docs.find(doc => doc.id === nftId);
+
+    if (matchingDoc) {
+      // If a matching document is found, update it
+      const nftDocRef = doc(database, matchingDoc.ref.path);
+      await updateDoc(nftDocRef, { isOnSale: publishState });
     } else {
       // If no matching document is found, log a message
       console.log('No matching NFT found.');
@@ -181,5 +206,6 @@ export {
   fetchNFTsByCollectionId,
   fetchNFTByNFTId,
   fetchNFTByWalletId,
-  updateNFTWalletId
+  updateNFTWalletId,
+  reupdateIsOnSale
 }

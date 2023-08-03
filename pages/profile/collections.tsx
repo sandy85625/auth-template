@@ -7,7 +7,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { NFTMetadata } from '../../interfaces/nft-forms';
 import { fetchNFTByWalletId } from '../../api/nft';
-import NFTCard from '../../components/cards/collections-nft-cards/NftCard';
+import ProfileNFTCard from '../../components/cards/collections-nft-cards/ProfileNftCard';
 
 const MyCollection: NextPage = () => {
   const { user } = useAuth();
@@ -65,7 +65,7 @@ const MyCollection: NextPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 gap-4">
           {collections && collections.map((nft, index) => (
             <div key={index}>
-              <NFTCard href={`/collections/${nft.collectionId}/${nft.id}`} {...nft} />
+              <ProfileNFTCard href={`/collections/${nft.collectionId}/${nft.id}`} {...nft} />
             </div>
           ))}
         </div>

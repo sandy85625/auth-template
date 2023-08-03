@@ -30,6 +30,7 @@ interface NFTMetadata {
   basePrice: number;
   currentPrice: number;
   image: string;
+  isOnSale: boolean;
   attributes: Array<NFTMetadataAttribute>;
 }
 

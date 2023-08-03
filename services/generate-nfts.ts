@@ -83,7 +83,8 @@ async function generateNFTs(
             image: downloadURL,
             attributes: attributes,
             basePrice: form.CollectionBasePrice,
-            currentPrice: form.CollectionBasePrice
+            currentPrice: form.CollectionBasePrice,
+            isOnSale: true
         };
 
         nfts.set(docRefs[i], nft);

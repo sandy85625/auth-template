@@ -67,7 +67,11 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
             <p className="mt-1 text-lg text-green-600 font-semibold">{nft.basePrice}</p>
           </div>
           <div className="mt-4">
-            <PaymentForm nft={nft} profile={profile}/>
+            { 
+              nft.isOnSale ? 
+                <PaymentForm nft={nft} profile={profile}/> : 
+                <div>Not Available for Sale</div> 
+            }
           </div>
         </div>
       </div>
