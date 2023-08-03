@@ -4,7 +4,6 @@ import LoadingSpinner from "../loaders/LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
 import { readProfileData } from "../../api/profile";
 import { ProfileData } from "../../interfaces";
-import { updateNFTWalletId } from "../../api/nft";
 import PaymentForm from "../razorpay";
 
 interface NFTDetailsProps {
@@ -17,9 +16,15 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
   const { user } = useAuth()
 
   useEffect(() => {
-    if(user) readProfileData(user).then(setProfile).catch(console.error)
-    setNft(propNft);
+      setNft(propNft);
   }, [propNft]);
+
+  useEffect(() => {
+      if(user) readProfileData(user).then(setProfile).catch(error => {
+          console.error(error);
+          setProfile(null); // consider setting profile to null or some default state in case of error
+      })
+  }, [user]);
 
   if (!nft) {
     return (

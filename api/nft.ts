@@ -165,7 +165,7 @@ const updateNFTWalletId = async (collectionId: string, nftId: string, newWalletI
     if (matchingDoc) {
       // If a matching document is found, update it
       const nftDocRef = doc(database, matchingDoc.ref.path);
-      await updateDoc(nftDocRef, { walletId: newWalletId });
+      await updateDoc(nftDocRef, { ownerId: newWalletId });
     } else {
       // If no matching document is found, log a message
       console.log('No matching NFT found.');
