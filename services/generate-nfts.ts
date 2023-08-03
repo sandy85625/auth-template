@@ -68,7 +68,6 @@ async function generateNFTs(
     for (let i = 0; i < form.CollectionTotalNumberOfNFTs; i++) {
         const index = Math.floor(Math.random() * allCombinations.length);
         const attributes = allCombinations.splice(index, 1)[0];
-
         const qrUrl = `${BASE_URL}/collections/${collectionId}/${docRefs[i].id}`
         const blob = await generateQRCode(qrUrl, form.NFTClass, logoImage);
         const storageRef = ref(storage, `${collectionId}/image-${i}`);
