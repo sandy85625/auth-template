@@ -71,7 +71,7 @@ async function generateNFTs(
 
         const qrUrl = `${BASE_URL}/collections/${collectionId}/${docRefs[i].id}`
         const blob = await generateQRCode(qrUrl, form.NFTClass, logoImage);
-        const storageRef = ref(storage, `${user.uid}/image-${i}`);
+        const storageRef = ref(storage, `${collectionId}/image-${i}`);
         await uploadBytes(storageRef, blob);
         const downloadURL = await getDownloadURL(storageRef);
 
