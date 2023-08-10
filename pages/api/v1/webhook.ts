@@ -3,14 +3,22 @@ import Stripe from 'stripe';
 import { updateNFTWalletId } from '../../../api/nft';
 import { stripe } from '../../../utils/stripe';
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const sig = req.headers['stripe-signature'];
 
     let event: Stripe.Event;
 
+    const rawBody = await getRawBody(req);
+
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
+      event = stripe.webhooks.constructEvent(rawBody, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
     } catch (err: any) {
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
@@ -29,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 console.error("Failed to update NFT Wallet ID:", error);
             }
         }
-      }
+    }
 
     // Return a response to acknowledge the event has been processed
     return res.json({ received: true });
@@ -40,4 +48,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .status(405)
       .end('Method Not Allowed');
   }
+}
+
+function getRawBody(req: NextApiRequest): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let data = '';
+    req.on('data', (chunk) => {
+      data += chunk;
+    });
+    req.on('end', () => {
+      resolve(data);
+    });
+  });
 }
