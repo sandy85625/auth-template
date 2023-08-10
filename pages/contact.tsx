@@ -18,7 +18,7 @@ export default function Contact() {
         <h2 className="text-2xl md:text-3xl font-semibold mb-2">Phone Number</h2>
         <p className="text-lg md:text-xl">+91 8848063711</p>
       </div>
-      <a href="https://wa.me/8848063711" target="_blank" rel="noreferrer" className="text-green-100 underline font-bold">
+      <a href="https://wa.me/+918848063711" target="_blank" rel="noreferrer" className="text-green-100 underline font-bold">
         Message us on WhatsApp
       </a>
     </div>

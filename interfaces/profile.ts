@@ -18,6 +18,7 @@ interface ProfileFieldPropsImplementation {
     label: string;
     value: string;
     isSensitive?: boolean;
+    toBeCopied?: boolean;
   }
 
 export type {
