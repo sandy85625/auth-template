@@ -12,10 +12,10 @@ export default function Dashboard() {
     if (!loading && !user) router.push('/login');
   }, [user, loading, router]);
 
-  if (loading || !user) return <LoadingSpinner />;
+  if (loading) return <LoadingSpinner />;
   return (
     <div>
-      <Landing user={user} />
+      <Landing />
     </div>
   );
 }

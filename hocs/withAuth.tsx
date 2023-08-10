@@ -16,9 +16,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
       if (user) {
         readProfileData(user)
           .then(setProfile)
-          .catch(() => {
-            setProfile(null);
-          });
+          .catch(console.error);
       }
       
       const isLoggedIn = !!user; 
@@ -34,8 +32,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
       
       if (!isLoggedIn) {
         setAuthStatus('unauthorized');
-      } else if (isLoggedIn && profile?.role !== 'admin' && (window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin/'))) {
-        router.push('/home');
+      } else if (isLoggedIn && profile?.role !== 'admin' && (window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin/'))) {       
       } else {
         setAuthStatus('authenticated');
       }

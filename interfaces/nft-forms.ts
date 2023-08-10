@@ -41,11 +41,28 @@ interface CollectionFieldProps {
   register: any;
 }
 
+interface ProgramFormData {
+  ProgramName: string;
+  ProgramDescription: string;
+  ProgramCollections: Array<string>;
+  ProgramIntrestedUsers?: Array<string>
+}
+
+interface ProgramFormInput extends ProgramFormData {}
+
+interface ProgramFieldProps {
+  control: Control<ProgramFormInput>;
+  register: any;
+}
+
 export type {
   CollectionAttribute,
   CollectionFormData,
   NFTMetadataAttribute,
   NFTMetadata,
   CollectionFormInput,
-  CollectionFieldProps
+  CollectionFieldProps,
+  ProgramFormInput,
+  ProgramFormData,
+  ProgramFieldProps
 }

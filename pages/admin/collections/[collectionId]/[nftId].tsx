@@ -4,6 +4,7 @@ import { fetchNFTByNFTId } from '../../../../api/nft';
 import { useAuth } from '../../../../hooks/useAuth';
 import { NFTDetails } from '../../../../components/collections/NFTDetails';
 import { NFTMetadata } from '../../../../interfaces/nft-forms';
+import LoadingSpinner from '../../../../components/loaders/LoadingSpinner';
 
 export default function NFTExpanded() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function NFTExpanded() {
           <NFTDetails nft={nft} />
         </div>
       ) : (
-        <p className="text-center py-6">Loading...</p>
+        <LoadingSpinner />
       )}
     </div>
   );

@@ -48,7 +48,7 @@ export default function Collections() {
 
 
   return (
-    <div>
+    <div className='min-h-screen'>
       {errorMessage && (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
@@ -61,12 +61,12 @@ export default function Collections() {
         <button 
           className="mt-4 px-4 py-2 rounded bg-green-500 text-white" 
           onClick={publishHandler}>
-          Publish
+          {isPublished ? 'Published!': 'Publish'}
         </button>
       </div>
-      <div className="bg-gray-100 shadow rounded-lg p-6 m-4 flex flex-wrap justify-center">
+      <div className="bg-white shadow rounded-lg p-4 md:p-6 my-2 md:m-4 flex flex-wrap justify-center">
         {nfts.map((nft, index) => (
-          <div key={index}>
+          <div key={index} className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-2">
             <NFTCard href={`/collections/${collectionId}/${nft.id}`} {...nft} />
           </div>
         ))}

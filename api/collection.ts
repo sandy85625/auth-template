@@ -130,8 +130,6 @@ const fetchAllCollectionsByUserUID = async (userId: string): Promise<ICollection
       const matchingDoc = querySnapshot.docs.find(doc => doc.id === collectionId);
   
       if (matchingDoc) {
-        console.log(matchingDoc.id);
-        
         // If a matching document is found, update it
         await updateDoc(matchingDoc.ref, {
           CollectionPublished: true,
@@ -144,7 +142,6 @@ const fetchAllCollectionsByUserUID = async (userId: string): Promise<ICollection
       throw new Error(`Error: ${error.message}`)
     }
   };
-  
 
 export {
     createCollection,

@@ -56,7 +56,7 @@ const createNft = async (
 
 const fetchUserNFTsByCollectionId = async (collectionId: string): Promise<NFTMetadata[]> => {
   try {
-    const nftCollectionsGroup = collectionGroup(database, "nftCollection");
+    const nftCollectionsGroup = collectionGroup(database, "nftCollections");
     const q = query(nftCollectionsGroup, where('collectionId', '==', collectionId));
 
     // Execute the query and get the result
@@ -76,7 +76,7 @@ const fetchUserNFTsByCollectionId = async (collectionId: string): Promise<NFTMet
 const fetchNFTsByCollectionId = async (collectionId: string): Promise<NFTMetadata[]> => {
   try {
     const nfts: NFTMetadata[] = [];
-    const nftCollectionsGroup = collectionGroup(database, "nftCollection");
+    const nftCollectionsGroup = collectionGroup(database, "nftCollections");
     const q = query(nftCollectionsGroup, where('collectionId', '==', collectionId));
 
     // Execute the query and get the result
@@ -99,7 +99,7 @@ const fetchNFTsByCollectionId = async (collectionId: string): Promise<NFTMetadat
 const fetchNFTByNFTId = async (collectionId: string, nftId: string): Promise<NFTMetadata | null> => {
   try {
     // Perform the Collection Group query
-    const nftCollectionsGroup = collectionGroup(database, "nftCollection");
+    const nftCollectionsGroup = collectionGroup(database, "nftCollections");
     const q = query(nftCollectionsGroup, where('collectionId', '==', collectionId));
 
     // Execute the query and get the result
@@ -126,7 +126,7 @@ const fetchNFTByNFTId = async (collectionId: string, nftId: string): Promise<NFT
 const fetchNFTByWalletId = async (walletId: string): Promise<NFTMetadata[] | null> => {
   try {
     // Perform the Collection Group query on the 'nfts' collection
-    const nftCollectionsGroup = collectionGroup(database, 'nftCollection');
+    const nftCollectionsGroup = collectionGroup(database, 'nftCollections');
 
     // Add a where clause to find documents where walletId matches
     const q = query(nftCollectionsGroup, where('ownerId', '==', walletId));
@@ -153,7 +153,7 @@ const fetchNFTByWalletId = async (walletId: string): Promise<NFTMetadata[] | nul
 const updateNFTWalletId = async (collectionId: string, nftId: string, newWalletId: string): Promise<void> => {
   try {
     // Perform the Collection Group query
-    const nftCollectionsGroup = collectionGroup(database, "nftCollection");
+    const nftCollectionsGroup = collectionGroup(database, "nftCollections");
     const q = query(nftCollectionsGroup, where('collectionId', '==', collectionId));
 
     // Execute the query and get the result
@@ -178,7 +178,7 @@ const updateNFTWalletId = async (collectionId: string, nftId: string, newWalletI
 const reupdateIsOnSale = async (collectionId: string, nftId: string, publishState: boolean): Promise<void> => {
   try {
     // Perform the Collection Group query
-    const nftCollectionsGroup = collectionGroup(database, "nftCollection");
+    const nftCollectionsGroup = collectionGroup(database, "nftCollections");
     const q = query(nftCollectionsGroup, where('collectionId', '==', collectionId));
 
     // Execute the query and get the result

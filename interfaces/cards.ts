@@ -2,9 +2,10 @@ interface CreateNewCardPropsImplementation {
     title: string;
     description: string;
     price?: number;
-    onClick: () => void;
+    isPublished?: boolean;
+    onShowInterestClick?: () => void;
+    onClick?: () => void;
   }
-
 
   export type {
     CreateNewCardPropsImplementation

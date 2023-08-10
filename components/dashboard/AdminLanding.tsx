@@ -1,17 +1,38 @@
 import { useRouter } from 'next/router';
-import { User } from 'firebase/auth';
 import ItemsCard from '../cards/dashboard-cards/ItemsCard';
-import React from 'react';
+import React, { useEffect, useState }  from 'react';
+import { useAuth } from '../../hooks/useAuth';
+import { fetchAllProgramsByUserUID } from '../../api/program';
+import { ProgramFormData } from '../../interfaces/nft-forms';
+import ProgramCard from '../cards/dashboard-cards/ProgramCard';
 
-type Props = {
-    user: User
-}
+export interface IProgram extends ProgramFormData {
+    id: string;
+  }
 
-function Landing(props: Props) {
+function Landing() {
     const router = useRouter();
+    const { user, loading } = useAuth();
+
+    useEffect(() => {
+        if (loading) {
+        // maybe show a loading spinner here
+        return;
+        }
+
+        if(user !== null){
+            const getCollections = async () => {
+                const programsData = await fetchAllProgramsByUserUID(user.uid);
+                setPrograms(programsData);
+            }
+            getCollections();
+        }
+    }, [user, loading]);
+
+    const [programs, setPrograms] = useState<IProgram[]>([]);
 
     const handleNewProgramClick = () => {
-        router.push('/admin/collections/new')
+        router.push('/admin/programs/new')
       }
     
       const handleImportDataClick = () => {
@@ -19,25 +40,36 @@ function Landing(props: Props) {
       }
   
     return (
-        <section>
-            <div className="py-8 px-8">
-                <h1 className="text-2xl font-bold mb-4">Welcome, {props.user.email}</h1>
+        <section className='min-h-screen bg-white text-gray-800'>
+            <div className="py-12 px-8">
+                <h1 className="text-3xl font-semibold mb-6 text-blue-700">Welcome, {user?.email}</h1>
             </div>
-            <div className="px-6">
-                <div className="flex flex-row">
-                <div className="w-1/4 px-2">
-                    <ItemsCard title="Create New" description="Click to create a new program" onClick={handleNewProgramClick} />
+            <div className="px-8">
+                <div className="flex flex-row gap-4">
+                    <div className="w-1/4 px-2">
+                        <ItemsCard title="Create New" description="Click to create a new program" onClick={handleNewProgramClick} />
+                    </div>
+                    <div className="w-1/4 px-2">
+                        <ItemsCard title="Import Data" description="Click to import new dataset" onClick={handleImportDataClick} />
+                    </div>
                 </div>
-                <div className="w-1/4 px-2">
-                    <ItemsCard title="Import Data" description="Click to import new dataset" onClick={handleImportDataClick} />
+                <hr className="my-8 border-blue-300" />
+                <div className="px-2 grid grid-cols-3 gap-6">
+                {programs.length === 0 ? (
+                    <p className="col-span-3 text-center text-gray-500">No collections created!</p>
+                ) : (
+                    programs.map(program => (
+                        // Render your program item card here
+                        <ProgramCard 
+                            key={program.id} 
+                            title={`${program.ProgramName}`} 
+                            description={program.ProgramDescription} 
+                            onClick={() => router.push(`/admin/programs/${program.id}`)}
+                        />
+                    ))
+                )}
                 </div>
-                </div>
-                <hr className="my-8 border-gray-300" />
-                <div className="grid grid-cols-3 gap-6">
-                <p className="col-span-3 text-center text-gray-600">No programs created!</p>
-                {/* Render your already created cards here */}
-                </div>
-            </div> 
+            </div>
         </section>
   )
 }
