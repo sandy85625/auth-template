@@ -3,7 +3,7 @@ import { Control } from 'react-hook-form';
 interface CollectionAttribute {
   trait_type: string;
   value: string | number;
-  percentage: number;
+  percentage?: number;
 }
 
 interface CollectionFormData {

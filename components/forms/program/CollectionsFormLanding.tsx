@@ -1,5 +1,5 @@
 import { useForm, Controller, SubmitHandler, useFieldArray } from 'react-hook-form';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { CollectionFieldProps, CollectionFormInput } from '../../../interfaces/nft-forms';
 import LoadingSpinner from '../../loaders/LoadingSpinner';
 import SuccessComponent from '../../messages/SuccessComponent';
@@ -8,33 +8,46 @@ import { createCollection } from '../../../api/collection';
 import { useAuth } from '../../../hooks/useAuth';
 
 const CollectionAttributeField: React.FC<CollectionFieldProps> = ({ control, register }) => {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'CollectionAttributesList',
-  });
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'CollectionAttributesList',
+    });
 
-  const nftTraitOptions = ['Background', 'Character', 'Accessory']; // Define your options here
+    const [nftTraitOptions, setNftTraitOptions] = useState(['Background', 'Character', 'Accessory', 'Others']);
+    const [newTrait, setNewTrait] = useState('');
 
-  return (
-    <div>
-      {fields.map((field, index) => (
-        <div key={field.id} className='flex flex-col'>
-          <select {...register(`CollectionAttributesList.${index}.trait_type`)} required className='border p-2 rounded'>
-            <option disabled defaultValue="" value=""> -- select a trait type -- </option>
-            {nftTraitOptions.map((option, i) => (
-              <option key={i} value={option}>
-                {option}
-              </option>
+    const handleAddTrait = () => {
+        if (newTrait) {
+            setNftTraitOptions(prevTraits => [...prevTraits, newTrait]);
+            setNewTrait(''); // Clear the input
+        }
+    };
+
+    return (
+        <div>
+          <div className='mt-2'>
+                <input value={newTrait} onChange={(e) => setNewTrait(e.target.value)} placeholder='Enter a new trait type...' className='border p-2 rounded' />
+                <button type='button' onClick={handleAddTrait} className='ml-2 text-blue-500'>Add Trait Type</button>
+            </div>
+            <div className='mt-2'>
+            {fields.map((field, index) => (
+                <div key={field.id} className='flex flex-col'>
+                    <select {...register(`CollectionAttributesList.${index}.trait_type`)} required className='border p-2 rounded'>
+                        <option disabled defaultValue="" value=""> -- select a trait type -- </option>
+                        {nftTraitOptions.map((option, i) => (
+                            <option key={i} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                    <input defaultValue={field.value} {...register(`CollectionAttributesList.${index}.value`)} required placeholder='Value' className='border p-2 rounded' />
+                    <button type='button' onClick={() => remove(index)} className='ml-2 text-red-500'>Remove</button>
+                </div>
             ))}
-          </select>
-          <input defaultValue={field.value} {...register(`CollectionAttributesList.${index}.value`)} required placeholder='Value' className='border p-2 rounded' />
-          <input defaultValue={field.percentage} {...register(`CollectionAttributesList.${index}.percentage`)} required placeholder='Percentage' type="number" className='border p-2 rounded' />
-          <button type='button' onClick={() => remove(index)} className='ml-2 text-red-500'>Remove</button>
+            <button type='button' onClick={() => append({ trait_type: '', value: '' })} className='mt-2 text-blue-500'>Add Attribute</button>
+            </div>
         </div>
-      ))}
-      <button type='button' onClick={() => append({ trait_type: '', value: '', percentage: 0 })} className='mt-2 text-blue-500'>Add Attribute</button>
-    </div>
-  );
+    );
 };
 
 const CollectionForm = () => {
@@ -77,7 +90,7 @@ const CollectionForm = () => {
     setErrorMessage(null);
   }
 
-  const nftClassOptions = ['Bronze', 'Silver', 'Gold', 'Platinum']; // Define your options here
+  const nftClassOptions = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Ruby', 'Emerald', 'Sapphire', 'Crysatalline', 'Precious']; // Define your options here
 
   return (
     <div className="py-10 flex items-center justify-center">
