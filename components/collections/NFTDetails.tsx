@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { readProfileData } from "../../api/profile";
 import { ProfileData } from "../../interfaces";
 import PaymentForm from "../razorpay";
+import { StripePaymentButton } from "../stripe";
 
 interface NFTDetailsProps {
   nft: NFTMetadata;
@@ -69,7 +70,8 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
           <div className="mt-4">
             { 
               nft.isOnSale ? 
-                <PaymentForm nft={nft} profile={profile}/> : 
+                // <PaymentForm nft={nft} profile={profile}/> : 
+                <StripePaymentButton nft={nft} walletID={profile.walletID} /> :
                 <div>Not Available for Sale</div> 
             }
           </div>

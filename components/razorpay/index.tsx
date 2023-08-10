@@ -80,7 +80,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ nft, profile }) => {
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
-      <button onClick={displayRazorpay} className='w-full py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200'>Buy</button>
+      <button onClick={displayRazorpay} className='w-full py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200'>Buy Now</button>
     </>
   );
 };
