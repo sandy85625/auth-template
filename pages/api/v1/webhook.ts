@@ -36,6 +36,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   } else {
     // Handle other HTTP methods
-    return res.setHeader('Allow', 'POST').status(405).end('Method Not Allowed');
+    return res.setHeader('Allow', 'POST')
+      .status(405)
+      .end('Method Not Allowed');
   }
 }
