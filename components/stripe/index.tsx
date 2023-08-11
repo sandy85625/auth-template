@@ -10,7 +10,7 @@ interface StripePaymentButtonProps {
 
 export const StripePaymentButton: React.FC<StripePaymentButtonProps> = ({ nft, walletID }) => {
   const { user } = useAuth();
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_TEST_API_PUBLISHABLE_KEY!);
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_PUBLISHABLE_KEY!);
 
   const handleCheckout = async () => {
     const stripe = await stripePromise;
