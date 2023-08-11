@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const rawBody = await getRawBody(req);
 
     try {
-      event = stripe.webhooks.constructEvent(rawBody, sig!, process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET!);
+      event = stripe.webhooks.constructEvent(rawBody, sig!, process.env.NEXT_PUBLIC_STRIPE_TEST_WEBHOOK_SECRET!);
     } catch (err: any) {
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
