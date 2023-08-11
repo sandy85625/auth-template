@@ -24,15 +24,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (event.type === 'checkout.session.completed') {
+      console.log('session checkout completed!');
+      
         const session = event.data.object as Stripe.Checkout.Session;
       
         if(session && session.payment_status === 'paid' && session.metadata) {
+          console.log('entered!');
+          
             const collectionId = session.metadata.collectionId;
             const nftId = session.metadata.nftId;
             const walletID = session.metadata.walletID;
+          console.log(collectionId, nftId, walletID);
+
       
             try {
+                console.log('entered updatedWallet!');
+                
                 await updateNFTWalletId(collectionId, nftId, walletID);
+                console.log('completed!');
+                
             } catch (error) {
                 console.error("Failed to update NFT Wallet ID:", error);
             }
