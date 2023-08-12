@@ -125,6 +125,7 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         <input 
           type="text"
           placeholder="Full Name"
+          required
           value={props.name}
           onChange={(e) => props.setName(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
@@ -132,6 +133,7 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         <input 
           type="email"
           placeholder="Email"
+          required
           value={props.email}
           onChange={(e) => props.setEmail(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
@@ -139,6 +141,7 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         <input 
           type="password"
           placeholder="Password"
+          required
           value={props.password}
           onChange={(e) => props.setPassword(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
@@ -146,6 +149,7 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         <input 
           type="password"
           placeholder="Confirm Password"
+          required
           value={props.confirmPassword}
           onChange={(e) => props.setConfirmPassword(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
@@ -153,6 +157,7 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         <input 
           type="text"
           placeholder="Phone Number"
+          required
           value={props.phone}
           onChange={(e) => props.setPhone(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
