@@ -14,7 +14,7 @@ interface CryptoPaymentProps {
 
     const handlePayment = async () => {
 
-      if(profile.walletAccountType === 'metamask' || ''){
+      if(profile.walletAccountType === 'metamask'){
         if (window.ethereum) {
             try {
                 // Request account access
