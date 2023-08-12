@@ -14,9 +14,9 @@ const Footer: React.FC = () => {
           <p className='text-sm md:text-base'>&copy; {new Date().getFullYear()} Evoura Technologies Private Limited</p>
         </div>
         <div className="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-4 text-center md:text-left">
-          {/* <Link href="/about" className='hover:text-blue-200'>About</Link>
-          <Link href="/services" className='hover:text-blue-200'>Services</Link> */}
           <Link href="/contact" className='hover:text-blue-200'>Contact Us</Link>
+          <Link href="/privacy" className='hover:text-blue-200'>Privacy Policy</Link>
+          <Link href="/terms-and-conditions" className='hover:text-blue-200'>Terms and Conditions</Link>
         </div>
         <div className="flex items-center space-x-4 mt-4 md:mt-0">
           <Link href="https://twitter.com/evouratech" target="_blank" rel="noopener noreferrer">
