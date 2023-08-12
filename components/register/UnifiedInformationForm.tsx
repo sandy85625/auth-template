@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { app } from '../../firebase/firebase.config';
@@ -10,6 +10,7 @@ interface InformationFormProps {
   walletId: string | null;
   walletPrivateKey: string | null;
   walletMnemonicKey: string | null;
+  walletAccountType: string | null;
   email: string;
   setEmail: (value: string) => void;
   password: string;
@@ -28,6 +29,7 @@ interface InformationFormProps {
 export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) => {
 
   const router = useRouter();
+  const [acceptedTerms, setAcceptedTerms] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,11 +64,12 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         props.walletId || '',
         props.walletPrivateKey || '',
         props.walletMnemonicKey || '',
-        props.gstID || ''
+        props.gstID || '',
+        props.walletAccountType || ''
       );
       router.push('/login');
     } catch (error: any) {
-      alert(error.message);
+      alert('Something went wrong! Try again!');
     }
   };
 
@@ -95,7 +98,8 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
             props.walletId || '',
             props.walletPrivateKey || '',
             props.walletMnemonicKey || '',
-            props.gstID || ''
+            props.gstID || '',
+            props.walletAccountType || ''
           );
         }
   
@@ -110,7 +114,7 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         throw new Error('No user found');
       }
     } catch (error: any) {
-      alert(error.message);
+      alert('Something went wrong! Try again');
     }
   };
   
@@ -163,17 +167,35 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
           />
         )}
       </div>
+      <div className="flex items-center space-x-2 my-4">
+        <input 
+          type="checkbox"
+          checked={acceptedTerms}
+          onChange={(e) => setAcceptedTerms(e.target.checked)}
+        />
+        <span>
+          I accept the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="underline">Terms and Conditions</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline">Privacy Policy</a>
+        </span>
+      </div>
       <div className="py-4 md:py-2 space-y-4">
         <div className="flex justify-between space-x-4">
           <button onClick={props.goToPreviousStep} className="px-4 py-2 rounded border border-gray-400 text-gray-400">
             Previous
           </button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-700">
+          <button 
+            onClick={handleSubmit} 
+            disabled={!acceptedTerms} 
+            className={`px-4 py-2 ${acceptedTerms ? 'bg-blue-500 hover:bg-blue-600 focus:bg-blue-700' : 'bg-blue-300'} text-white rounded`}
+          >
             Submit
           </button>
         </div>
         <hr className='border-t border-gray-300 my-4' />
-        <button onClick={googleSignIn} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+        <button 
+          onClick={googleSignIn} 
+          disabled={!acceptedTerms} 
+          className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${acceptedTerms ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-red-300'}`}
+        >
           Sign in with Google
         </button>
       </div>

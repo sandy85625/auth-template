@@ -25,7 +25,7 @@ export const StripePaymentButton: React.FC<StripePaymentButtonProps> = ({ nft, w
 
     if (!response.ok) {
       const error = await response.json();
-      console.log('Error:', JSON.stringify(error, null, 2));
+      alert('Something went wrong! If fund is gone from your account, it will be refunded within 2-3 working days!')
       return;
     }
 
@@ -42,7 +42,7 @@ export const StripePaymentButton: React.FC<StripePaymentButtonProps> = ({ nft, w
   return (
     <button 
       onClick={handleCheckout} 
-      className="w-full py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200">
+      className="w-full my-2 py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200">
       Buy Now
     </button>
   );

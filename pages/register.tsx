@@ -17,6 +17,7 @@ export default function Register() {
   const [phone, setPhone] = useState('');
   const [gstID, setGstID] = useState('');
   const [walletId, setWalletId] = useState<string | null>(null);
+  const [walletAccountType, setWalletAccountType] = useState<string | null>(null);
   const [walletPrivateKey, setWalletPrivateKey] = useState<string | null>(null);
   const [walletMnemonicKey, setWalletMnemonicKey] = useState<string | null>(null);
 
@@ -55,8 +56,11 @@ export default function Register() {
             setWalletPrivateKey={setWalletPrivateKey}
             walletMnemonicKey={walletMnemonicKey}
             setWalletMnemonicKey={setWalletMnemonicKey}
+            walletAccountType={walletAccountType}
+            setWalletAccountType={setWalletAccountType}
             goToNextStep={goToNextStep}
             goToPreviousStep={goToPreviousStep}
+            
           />
         )}
         
@@ -66,6 +70,7 @@ export default function Register() {
             walletId={walletId}
             walletPrivateKey={walletPrivateKey}
             walletMnemonicKey={walletMnemonicKey}
+            walletAccountType={walletAccountType}
             email={email}
             setEmail={setEmail}
             password={password}

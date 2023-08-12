@@ -8,6 +8,8 @@ interface WalletFormProps {
   setWalletPrivateKey: (key: string | null) => void;
   walletMnemonicKey: string | null;
   setWalletMnemonicKey: (key: string | null) => void;
+  walletAccountType: string | null;
+  setWalletAccountType: (key: string | null) => void;
   goToNextStep: () => void;
   goToPreviousStep: () => void;
 }
@@ -18,6 +20,7 @@ const WalletForm: React.FC<WalletFormProps> = (props) => {
     props.setWalletId(id);
     props.setWalletPrivateKey(privateKey);
     props.setWalletMnemonicKey(mnemonic);
+    props.setWalletAccountType('wallet')
     props.goToNextStep();
   };
 
@@ -26,12 +29,13 @@ const WalletForm: React.FC<WalletFormProps> = (props) => {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         props.setWalletId(accounts[0]);
+        props.setWalletAccountType('metamask')
         props.goToNextStep();
       } catch (error: any) {
-        console.error("User denied account access");
+        alert('Something went wrong! Try again!')
       }
     } else {
-      console.error("Ethereum object doesn't exist!");
+      alert('Metamask not found! Use Desktop in case!')
     }
   };
 

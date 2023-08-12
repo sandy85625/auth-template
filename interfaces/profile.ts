@@ -10,6 +10,8 @@ interface ProfileDataImplementation {
     walletID: string;
     walletPrivateKey: string;
     walletMnemonicPhrase: string;
+    gstId: string
+    walletAccountType: string
 }
 
 // ProfileField Properties Interface

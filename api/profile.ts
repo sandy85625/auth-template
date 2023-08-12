@@ -39,7 +39,8 @@ const readProfileData = async (user: User): Promise<any> => {
     walletID: string,
     walletPrivateKey: string,
     walletMnemonicPhrase: string,
-    gstId: string
+    gstId: string,
+    walletAccountType: string
     ) => {
   
     if (user) {
@@ -55,7 +56,8 @@ const readProfileData = async (user: User): Promise<any> => {
           walletID,
           walletPrivateKey,
           walletMnemonicPhrase,
-          gstId
+          gstId,
+          walletAccountType
         });
       } catch (error: any) {
         throw new Error('Failed to save profile data. Please try again later.');
