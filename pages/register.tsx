@@ -1,198 +1,88 @@
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { app } from '../firebase/firebase.config';
-import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/router';
-import { saveProfileData } from '../api/profile';
+import { useState } from 'react';
+
+// Import components
+import { AccountType } from '../components/register/AccountType';
+import { UnifiedInformationForm } from '../components/register/UnifiedInformationForm';
+import WalletForm from '../components/register/WalletForm';
 
 export default function Register() {
+
+  // States
+  const [step, setStep] = useState(1);
+  const [accountType, setAccountType] = useState<string | null>(null); // either 'personal' or 'business'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const router = useRouter();
-  const [isBusiness, setIsBusiness] = useState(false);
+  const [gstID, setGstID] = useState('');
+  const [walletId, setWalletId] = useState<string | null>(null);
+  const [walletPrivateKey, setWalletPrivateKey] = useState<string | null>(null);
+  const [walletMnemonicKey, setWalletMnemonicKey] = useState<string | null>(null);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-  
-    const auth = getAuth(app);
-    try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-  
-      // Assign user role based on "isBusiness" state
-      const role = isBusiness ? 'admin' : 'user';
-  
-      await sendEmailVerification(user);
-      await saveProfileData(
-        name, 
-        email, 
-        phone,
-        '',
-        user,
-        role
-      );
-      router.push('/login');
-    } catch (error: any) {
-      alert(error.message);
+  const goToNextStep = () => {
+    if (step < 3) {
+      setStep(step + 1);
     }
   };
 
-  const googleSignIn = async () => {
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      if (user) {
-        // Assign user role based on "isBusiness" state
-        const role = isBusiness ? 'admin' : 'user';
-
-        await saveProfileData(
-          user.displayName || '', 
-          user.email || '', 
-          user.phoneNumber || '', 
-          user.photoURL || '',
-          user,
-          role
-        );
-        if(role == 'admin'){
-          router.push('/admin')
-        } else {
-        router.push('/home');
-        }
-      } else {
-        throw new Error('No user found');
-      }
-    } catch (error: any) {
-      alert(error.message);
-    }
-  }
+  const goToPreviousStep = () => {
+    if (step > 1) setStep(step - 1);
+  };
 
   return (
-    <>
-  <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 py-12 px-4 sm:px-6 lg:px-8">
     <div className="max-w-md w-full space-y-8 bg-white p-6 rounded shadow-md">
       <div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign up for an account
         </h2>
       </div>
-      <div className="flex items-center justify-center">
-        <input
-          id="register-as-business"
-          name="register-as-business"
-          type="checkbox"
-          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          checked={isBusiness}
-          onChange={(e) => setIsBusiness(e.target.checked)}
-        />
-        <label htmlFor="register-as-business" className="ml-2 block text-sm text-gray-900">
-          Register as Business
-        </label>
-      </div>
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-        <input type="hidden" name="remember" value="true" />
-        <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="phone" className="sr-only">
-                Phone Number
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Phone Number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            </div>
+      <div className='flex justify-center'>
+        {step === 1 && (
+          <AccountType
+            accountType={accountType}
+            setAccountType={setAccountType}
+            goToNextStep={goToNextStep}
+          />
+        )}
 
-          <div>
-              <button
-                type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Sign up
-              </button>
-            </div>
-            </form>
-            <div>
-            <button onClick={googleSignIn} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-              Sign in with Google
-            </button>
-          </div>
+        {step === 2 && (
+          <WalletForm
+            walletId={walletId}
+            setWalletId={setWalletId}
+            walletPrivateKey={walletPrivateKey}
+            setWalletPrivateKey={setWalletPrivateKey}
+            walletMnemonicKey={walletMnemonicKey}
+            setWalletMnemonicKey={setWalletMnemonicKey}
+            goToNextStep={goToNextStep}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )}
+        
+        {step === 3 && (
+          <UnifiedInformationForm
+            accountType={accountType}
+            walletId={walletId}
+            walletPrivateKey={walletPrivateKey}
+            walletMnemonicKey={walletMnemonicKey}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
+            name={name}
+            setName={setName}
+            phone={phone}
+            setPhone={setPhone}
+            gstID={gstID}
+            setGstID={setGstID}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )}
         </div>
       </div>
-    </>
+    </div>
   );
-  } 
+}

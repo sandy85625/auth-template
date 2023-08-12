@@ -1,7 +1,13 @@
-import { doc, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { createBlockchainWallet } from '../utils/wallet';
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, getFirestore } from 'firebase/firestore';
 import { User } from '@firebase/auth';
 import { database} from '../firebase/firebase.config';
+
+async function doesProfileExist(user: User): Promise<boolean> {
+  const db = getFirestore();
+  const userDocRef = doc(db, 'profiles', user.uid);
+  const userDocSnap = await getDoc(userDocRef);
+  return userDocSnap.exists();
+}
 
 const readProfileData = async (user: User): Promise<any> => {
   
@@ -29,12 +35,15 @@ const readProfileData = async (user: User): Promise<any> => {
     phone: string,
     photoURL: string,
     user: User,
-    role: string
+    role: string,
+    walletID: string,
+    walletPrivateKey: string,
+    walletMnemonicPhrase: string,
+    gstId: string
     ) => {
   
     if (user) {
       const profileRef = doc(database, 'profiles', user.uid);
-      const [id, privateKey, mnemonic] = createBlockchainWallet();
   
       try {
         await setDoc(profileRef, {
@@ -43,9 +52,10 @@ const readProfileData = async (user: User): Promise<any> => {
           phone,
           photoURL,
           role,
-          walletID: id,
-          walletPrivateKey: privateKey,
-          walletMnemonicPhrase: mnemonic,
+          walletID,
+          walletPrivateKey,
+          walletMnemonicPhrase,
+          gstId
         });
       } catch (error: any) {
         throw new Error('Failed to save profile data. Please try again later.');
@@ -86,6 +96,7 @@ const readProfileData = async (user: User): Promise<any> => {
   };
 
 export {
+    doesProfileExist,
     readProfileData,
     saveProfileData,
     updateProfileData,

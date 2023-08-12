@@ -1,4 +1,4 @@
-// razorpay.d.ts
+// razorpay
 interface RazorpayOptions {
     key: string;
     currency: string;
@@ -20,10 +20,11 @@ interface RazorpayOptions {
   interface RazorpayConstructor {
     new (options: RazorpayOptions): RazorpayInstance;
   }
-  
+
   declare global {
     interface Window {
       Razorpay: RazorpayConstructor;
+      ethereum: any;
     }
   }
   
