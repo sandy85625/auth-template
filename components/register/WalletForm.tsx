@@ -35,7 +35,7 @@ const WalletForm: React.FC<WalletFormProps> = (props) => {
         alert('Something went wrong! Try again!')
       }
     } else {
-      alert('Metamask not found! Use Desktop in case!')
+      alert('Metamask not found!')
     }
   };
 
