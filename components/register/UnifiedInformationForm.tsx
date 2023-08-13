@@ -66,10 +66,13 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
           alert(`Registration successful. Redirecting to login!`)
           router.push('/login');
         }).catch((error: any) => {
-          if(error.message.includes('EXISTS' || 'exists' || 'Exists')) alert(`Email already exists! Try login`)
+          if(error.message.includes('auth/email-already-in-use')) alert(`Email already exists! Try login`)
+          else if(error.message.includes('auth/weak-password')) alert(`Weak password! Use another password with atleast 6 character with alphabets and numbers`)
+          else if(error.message.includes('auth/missing-email')) alert(`Please provide an email!`)
+          else if(error.message.includes('auth/invalid-email')) alert(`Please provide an correct email!`)
+          else alert(`Invalid information provided!`);
         })
   
-      
     } catch (error: any) {
       alert(`Something went wrong! Try again!`);
     }
