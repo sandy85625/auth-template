@@ -12,6 +12,15 @@ interface NFTDetailsProps {
   nft: NFTMetadata;
 }
 
+function isURL(str: string): boolean {
+  try {
+    new URL(str);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
   const [nft, setNft] = useState<NFTMetadata | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null)
@@ -58,9 +67,13 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
             <div className="mt-2 space-y-1">
               {nft.attributes && nft.attributes.map((attribute, index) => (
                 <div key={index} className="flex items-center justify-between">
-                  <p className="mr-2 md:mr-4 text-sm text-black">{attribute.trait_type} :</p>
-                  <p className="text-sm text-blue-700">{attribute.value.toString().toUpperCase()}</p>
-                </div>
+                <p className="mr-2 md:mr-4 text-sm text-black">{attribute.trait_type} :</p>
+                <p className="text-sm text-blue-700">
+                  {isURL(attribute.value.toString()) 
+                    ? <a href={attribute.value.toString()} target="_blank" rel="noopener noreferrer">Link</a>
+                    : attribute.value.toString().toUpperCase()}
+                </p>
+              </div>
               ))}
             </div>
           </div>
