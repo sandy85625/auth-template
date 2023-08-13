@@ -24,7 +24,7 @@ const Attribute: React.FC<AttributeProps> = ({ trait_type, value }) => {
   if (isURL(displayValue) && displayValue.length > 10) {
     content = (
       <a href={displayValue} target="_blank" rel="noopener noreferrer">
-        Link
+        Click to view
       </a>
     );
   } else if (isURL(displayValue)) {

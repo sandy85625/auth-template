@@ -11,7 +11,7 @@ export async function generateQRCode(url: string, imageClass: string, logoImage:
 
     const colorMapping: ColorMapping = {
         silver: '#C0C0C0',      // Silver color
-        gold: '#FFD700',        // Gold color
+        gold: '#FFC300',       // Gold color
         bronze: '#CD7F32',      // Bronze color
         platinum: '#E5E4E2',    // Platinum color
         ruby: '#9B111E',        // Ruby color (deep red)
@@ -26,10 +26,10 @@ export async function generateQRCode(url: string, imageClass: string, logoImage:
     try {
         const qrCodeDataURL = await QRCode.toDataURL(url, {
             color: {
-                dark: '#000000', // QR code color
-                light: '#0000'   // Transparent background
+                dark: '#FFFFFF',  // QR code color is white
+                light: '#0000'    // Transparent background
             }
-        });
+        });        
     
         const image = new Image();
         image.src = qrCodeDataURL;
@@ -60,7 +60,7 @@ export async function generateQRCode(url: string, imageClass: string, logoImage:
                     ctx.drawImage(image, 0, 0);
     
                     // Draw the logo in the center of the QR code
-                    const logoSize = Math.min(canvas.width, canvas.height) * 0.2; // 20% of the QR code's size
+                    const logoSize = Math.min(canvas.width, canvas.height) * 0.3; // 30% of the QR code's size
                     const logoX = (canvas.width - logoSize) / 2;
                     const logoY = (canvas.height - logoSize) / 2;
                     ctx.drawImage(logoImgElement, logoX, logoY, logoSize, logoSize);

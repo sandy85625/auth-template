@@ -14,6 +14,7 @@ interface CollectionFormData {
   NFTClass: string;
   CollectionTotalNumberOfNFTs: number;
   CollectionAttributesList: Array<CollectionAttribute>;
+  CollectionImage: string;
 }
 
 interface NFTMetadataAttribute {

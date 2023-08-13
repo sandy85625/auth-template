@@ -1,7 +1,5 @@
 import { addDoc, collection,updateDoc, getDoc, doc, getDocs, where, query, setDoc, collectionGroup, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { database } from "../firebase/firebase.config"
-import { ProfileData } from "../interfaces";
-import { readProfileData } from "./profile";
 import { createNft } from "./nft";
 import { User } from "firebase/auth";
 import { CollectionFormData } from "../interfaces/nft-forms";
@@ -13,7 +11,6 @@ export interface ICollection extends CollectionFormData {
 const createCollection = async (data: CollectionFormData, user: User) => {
   if (user) {
     try {
-      const profileData: ProfileData = await readProfileData(user);
       const userCollectionRef = doc(database, "collections", user.uid);
       
       // Check if the document exists
@@ -27,7 +24,7 @@ const createCollection = async (data: CollectionFormData, user: User) => {
       // Now create the subcollection "userCollections" under the user document
       const docRef = await addDoc(collection(userCollectionRef, "userCollections"), data);
       
-      await createNft(data, profileData.photoURL, user, docRef.id);
+      await createNft(data, data.CollectionImage, user, docRef.id);
     } catch (error: any) {
       throw new Error(`Error: ${error.message}`)
     }

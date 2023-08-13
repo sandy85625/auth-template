@@ -1,5 +1,5 @@
 import { useForm, Controller, SubmitHandler, useFieldArray } from 'react-hook-form';
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { CollectionFieldProps, CollectionFormInput } from '../../../interfaces/nft-forms';
 import LoadingSpinner from '../../loaders/LoadingSpinner';
 import SuccessComponent from '../../messages/SuccessComponent';
@@ -52,6 +52,7 @@ const CollectionAttributeField: React.FC<CollectionFieldProps> = ({ control, reg
 
 const CollectionForm = () => {
   const { register, control, handleSubmit } = useForm<CollectionFormInput>();
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -70,6 +71,7 @@ const CollectionForm = () => {
             NFTClass: data.NFTClass,
             CollectionTotalNumberOfNFTs: data.CollectionTotalNumberOfNFTs,
             CollectionAttributesList: data.CollectionAttributesList,
+            CollectionImage: uploadedImage || '/placeholder.jpg'
           };
 
           await createCollection(collection, user);
@@ -89,6 +91,19 @@ const CollectionForm = () => {
     setSuccessMessage(null);
     setErrorMessage(null);
   }
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          setUploadedImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const nftClassOptions = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Ruby', 'Emerald', 'Sapphire', 'Crysatalline', 'Precious']; // Define your options here
 
@@ -125,6 +140,8 @@ const CollectionForm = () => {
             />
             <label className="block text-sm mb-2">Total Number of NFTs in Collection:</label>
             <input {...register('CollectionTotalNumberOfNFTs')} required placeholder='Total number of NFTs' type='number' className='block w-full border p-2 rounded mb-6' />
+            <label className="block text-sm mb-2">Collection Image:</label>
+            <input type="file" accept="image/*" onChange={handleImageUpload} className='block w-full border p-2 rounded mb-6' />
             <label className="block text-sm mb-2">Base Price:</label>
             <input {...register('CollectionBasePrice')} required placeholder='Base price' type='number' step='0.01' className='block w-full border p-2 rounded mb-6' />
             <label className="block text-sm mb-2">Attributes:</label>

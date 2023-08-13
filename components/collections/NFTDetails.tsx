@@ -70,7 +70,7 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
                 <p className="mr-2 md:mr-4 text-sm text-black">{attribute.trait_type} :</p>
                 <p className="text-sm text-blue-700">
                   {isURL(attribute.value.toString()) 
-                    ? <a href={attribute.value.toString()} target="_blank" rel="noopener noreferrer">Link</a>
+                    ? <a href={attribute.value.toString()} target="_blank" rel="noopener noreferrer">Click to view</a>
                     : attribute.value.toString().toUpperCase()}
                 </p>
               </div>
@@ -79,7 +79,7 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
           </div>
           <div className="mt-4">
             <h4 className="text-sm text-blue-600 uppercase tracking-wider">Base Price</h4>
-            <p className="mt-1 text-lg text-green-600 font-semibold">{nft.basePrice}</p>
+            <p className="mt-1 text-lg text-green-600 font-semibold">{nft.basePrice} Rupees (INR)</p>
           </div>
           <div className="mt-4">
             { 
