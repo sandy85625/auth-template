@@ -63,8 +63,8 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
             props.gstID || '',
             props.walletAccountType || ''
           );
-          alert(`Registration successful. Redirecting to login!`)
-          router.push('/login');
+          alert(`To complete your registration, verify your email! Redirecting to login`)
+          router.push('/login')
         }).catch((error: any) => {
           if(error.message.includes('auth/email-already-in-use')) alert(`Email already exists! Try login`)
           else if(error.message.includes('auth/weak-password')) alert(`Weak password! Use another password with atleast 6 character with alphabets and numbers`)
