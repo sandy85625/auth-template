@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithPopup, GoogleAuthProvider, User } from 'firebase/auth';
 import { app } from '../../firebase/firebase.config';
 import { useRouter } from 'next/router';
 import { doesProfileExist, saveProfileData } from '../../api/profile';
@@ -41,35 +41,37 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
   
     const auth = getAuth(app);
     try {
-      // Check if the user exists
-      const existingUser = await signInWithEmailAndPassword(auth, props.email, props.password);
-      if (existingUser) {
-        alert('User already exists');
-        return;
-      }
+
+      createUserWithEmailAndPassword(auth, props.email, props.password)
+        .then(async (response) => {
+          const user = response.user;
+
+          // Assign user role based on "accountType" state
+          const role = props.accountType === 'business' ? 'admin' : 'user';
+      
+          await sendEmailVerification(user);
+          await saveProfileData(
+            props.name, 
+            props.email, 
+            props.phone,
+            '',
+            user,
+            role,
+            props.walletId || '',
+            props.walletPrivateKey || '',
+            props.walletMnemonicKey || '',
+            props.gstID || '',
+            props.walletAccountType || ''
+          );
+          alert(`Registration successful. Redirecting to login!`)
+          router.push('/login');
+        }).catch((error: any) => {
+          if(error.message.includes('EXISTS' || 'exists' || 'Exists')) alert(`Email already exists! Try login`)
+        })
   
-      const { user } = await createUserWithEmailAndPassword(auth, props.email, props.password);
-  
-      // Assign user role based on "accountType" state
-      const role = props.accountType === 'business' ? 'admin' : 'user';
-  
-      await sendEmailVerification(user);
-      await saveProfileData(
-        props.name, 
-        props.email, 
-        props.phone,
-        '',
-        user,
-        role,
-        props.walletId || '',
-        props.walletPrivateKey || '',
-        props.walletMnemonicKey || '',
-        props.gstID || '',
-        props.walletAccountType || ''
-      );
-      router.push('/login');
+      
     } catch (error: any) {
-      alert('Something went wrong! Try again!');
+      alert(`Something went wrong! Try again!`);
     }
   };
 
