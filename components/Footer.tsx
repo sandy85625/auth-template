@@ -17,6 +17,7 @@ const Footer: React.FC = () => {
           <Link href="/contact" className='hover:text-blue-200'>Contact Us</Link>
           <Link href="/privacy" className='hover:text-blue-200'>Privacy Policy</Link>
           <Link href="/terms-and-conditions" className='hover:text-blue-200'>Terms and Conditions</Link>
+          <Link href="/refund-policy" className='hover:text-blue-200'>Refund Policy</Link>
         </div>
         <div className="flex items-center space-x-4 mt-4 md:mt-0">
           <Link href="https://twitter.com/evouratech" target="_blank" rel="noopener noreferrer">
