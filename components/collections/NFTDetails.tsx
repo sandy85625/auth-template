@@ -7,6 +7,7 @@ import { ProfileData } from "../../interfaces";
 import PaymentForm from "../razorpay";
 import { StripePaymentButton } from "../stripe";
 import CryptoPaymentButton from "../crypto";
+import { useRouter } from "next/router";
 
 interface NFTDetailsProps {
   nft: NFTMetadata;
@@ -24,7 +25,22 @@ function isURL(str: string): boolean {
 export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
   const [nft, setNft] = useState<NFTMetadata | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null)
+  const [askForProfile, setAskForProfile] = useState(false);
+  const router = useRouter();
   const { user } = useAuth()
+
+  const handlePaymentClick = () => {
+    if (!user || !profile) {
+      alert('Please login for payment')
+      setAskForProfile(true);
+    }
+  };
+
+  useEffect(() => {
+    if (askForProfile && !user) {
+      router.push('/login');
+    }
+  }, [askForProfile, user, router]);
 
   useEffect(() => {
       setNft(propNft);
@@ -38,14 +54,6 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
   }, [user]);
 
   if (!nft) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-  
-  if (!profile) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <LoadingSpinner />
@@ -83,12 +91,19 @@ export const NFTDetails: React.FC<NFTDetailsProps> = ({ nft: propNft }) => {
           </div>
           <div className="mt-4">
             { 
-              nft.isOnSale ? 
-                // <PaymentForm nft={nft} profile={profile}/> : 
+              nft.isOnSale ? (
                 <div>
-                  <StripePaymentButton nft={nft} walletID={profile.walletID} />
-                  <CryptoPaymentButton nft={nft} profile={profile}/> 
-                  </div> :
+                  {user && profile ? (
+                    <>
+                      {/* <PaymentForm nft={nft} profile={profile} /> */}
+                      <StripePaymentButton nft={nft} walletID={profile.walletID} />
+                      <CryptoPaymentButton nft={nft} profile={profile} />
+                    </>
+                  ) : (
+                    <button className='w-full py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200' onClick={handlePaymentClick}>Proceed to Payment</button>
+                    )}
+                </div>
+              ):
                 <div>Not Available for Sale</div> 
             }
           </div>

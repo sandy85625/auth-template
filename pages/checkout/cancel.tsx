@@ -8,7 +8,7 @@ const Cancel: React.FC = () => {
       <p className="text-lg text-white mb-12 text-center max-w-md">
         We&apos;re sorry, but your payment has been cancelled. Please try again.
       </p>
-      <Link href="/home">
+      <Link href="/">
         <div className="inline-block px-6 py-3 text-lg font-semibold text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition duration-300">
           Go back to Home
         </div>

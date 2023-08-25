@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import LoadingSpinner from '../../components/loaders/LoadingSpinner';
 import Landing from '../../components/dashboard/AdminLanding';
+import withAuth from '../../hocs/withAuth';
 
-export default function Dashboard() {
+const Dashboard: React.FC = () => {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -19,3 +20,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default withAuth(Dashboard);

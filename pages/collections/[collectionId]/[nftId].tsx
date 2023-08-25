@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { fetchNFTByNFTId } from '../../../api/nft';
-import { useAuth } from '../../../hooks/useAuth';
 import { NFTDetails } from '../../../components/collections/NFTDetails';
 import { NFTMetadata } from '../../../interfaces/nft-forms';
 import LoadingSpinner from '../../../components/loaders/LoadingSpinner';
@@ -10,16 +9,15 @@ export default function NFTExpanded() {
   const router = useRouter();
   const { nftId, collectionId } = router.query;
   const [nft, setNft] = useState<NFTMetadata | null>(null);
-  const { user } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
-    if (nftId && collectionId && user) {
+    if (nftId && collectionId) {
       fetchNFTByNFTId(collectionId as string, nftId as string)
         .then(setNft)
         .catch((error: Error) => setErrorMessage(error.message));
     }
-  }, [nftId, collectionId, user]);
+  }, [nftId, collectionId]);
   
 
   return (

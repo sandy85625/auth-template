@@ -1,6 +1,5 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import withAuth from '../hocs/withAuth';
 import Head from 'next/head';
 import Navbar from '../components/navbars/Navbar';
 import Footer from '../components/Footer';
@@ -19,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Navbar />
       </nav>
       <main className="overflow-auto">
-        {withAuth(Component)(pageProps)}
+        <Component {...pageProps} />
       </main>
       <footer>
         <Footer />

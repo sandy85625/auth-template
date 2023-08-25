@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NFTCard from '../../../components/cards/collections-nft-cards/NftCard';
 import { fetchNFTsByCollectionId } from '../../../api/nft';
-import { useAuth } from '../../../hooks/useAuth';
 import { fetchCollectionById } from '../../../api/collection';
 import { NFTMetadata } from '../../../interfaces/nft-forms';
 
@@ -10,14 +9,13 @@ export default function Collections() {
   const router = useRouter();
   const { collectionId } = router.query;
   const [nfts, setNfts] = useState<NFTMetadata[]>([]);
-  const { user } = useAuth();
   const [collectionName, setCollectionName]= useState<string>('');
   const [collectionDescription, setCollectionDescription]= useState<string>('');
   const [collectionBasePrice, setCollectionBasePrice]= useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
-    if (collectionId && user) {
+    if (collectionId) {
       fetchNFTsByCollectionId(collectionId as string)
         .then(setNfts)
         .catch((error: Error) => setErrorMessage(error.message));
@@ -32,7 +30,7 @@ export default function Collections() {
         })
         .catch((error: Error) => setErrorMessage(error.message));
     }
-  }, [collectionId, user]);
+  }, [collectionId]);
 
   return (
     <div className="bg-blue-200 p-2 md:p-4">

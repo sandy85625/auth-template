@@ -41,9 +41,6 @@ function Landing() {
   
     return (
         <section className='min-h-screen bg-white text-gray-800'>
-            <div className="py-12 px-8">
-                <h1 className="text-3xl font-semibold mb-6 text-blue-700">Welcome, {user?.email}</h1>
-            </div>
             <div className="px-8">
                 <div className="flex flex-row gap-4">
                     <div className="w-1/4 px-2">

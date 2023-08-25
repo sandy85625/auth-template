@@ -1,6 +1,7 @@
 import Landing from '../../../components/collections/AdminLanding';
+import withAuth from '../../../hocs/withAuth';
 
-export default function Collections() {
+const Collections = () => {
 
   return (
     <>
@@ -8,3 +9,5 @@ export default function Collections() {
     </>
   );
 }
+
+export default withAuth(Collections)

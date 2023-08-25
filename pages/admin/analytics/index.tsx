@@ -1,6 +1,7 @@
-import ComingSoon from '../../../components/collections/ComingSoon';
+import ComingSoon from "../../../components/collections/ComingSoon";
+import withAuth from "../../../hocs/withAuth";
 
-export default function Settings() {
+const Analytics: React.FC = () => {
 
   return (
     <div className='min-h-screen'>
@@ -8,3 +9,5 @@ export default function Settings() {
     </div>
   );
 }
+
+export default withAuth(Analytics)

@@ -113,7 +113,7 @@ export const UnifiedInformationForm: React.FC<InformationFormProps> = (props) =>
         if(role === 'admin'){
           router.push('/admin')
         } else {
-          router.push('/home');
+          router.push('/');
         }
       } else {
         throw new Error('No user found');

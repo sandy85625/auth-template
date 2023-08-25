@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../hooks/useAuth';
 import CollectionCard from '../../components/cards/dashboard-cards/CollectionCard';
 import { ICollection, fetchCollectionById } from '../../api/collection';
 import { IProgram, fetchCollectionsByProgramId, fetchProgramById } from '../../api/program';
@@ -9,13 +8,12 @@ export default function Collections() {
   const router = useRouter();
   const { programId } = router.query;
   const [collections, setCollections] = useState<ICollection[]>([]);
-  const { user } = useAuth();
   const [program, setProgram]= useState<IProgram | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
 
   useEffect(() => {
-    if (programId && user) {
+    if (programId) {
       fetchProgramById(programId as string)
         .then(setProgram)
         .catch(console.error)
@@ -33,7 +31,7 @@ export default function Collections() {
         })
         .catch((error: Error) => setErrorMessage(error.message));
     }
-  }, [programId, user]);
+  }, [programId]);
   
 
 

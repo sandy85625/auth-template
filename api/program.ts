@@ -30,14 +30,14 @@ const createProgram = async (data: ProgramFormData, user: User) => {
 
 const fetchAllProgramsByUserUID = async (userId: string): Promise<IProgram[]> => {
     try {
-      const collectionsRef = collection(database, "programs", userId, "userPrograms");
-      const querySnapshot = await getDocs(collectionsRef);
-      const collections: IProgram[] = [];
+      const programsRef = collection(database, "programs", userId, "userPrograms");
+      const querySnapshot = await getDocs(programsRef);
+      const programs: IProgram[] = [];
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        collections.push({ id: doc.id, ...doc.data() as ProgramFormData });
+        programs.push({ id: doc.id, ...doc.data() as ProgramFormData });
       });
-      return collections;
+      return programs;
     } catch (error) {
       return [];
     }

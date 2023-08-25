@@ -1,5 +1,6 @@
+import withAuth from "../../../hocs/withAuth";
 
-export default function Settings() {
+const Settings: React.FC = () => {
 
   return (
     <div className='min-h-screen'>
@@ -7,3 +8,5 @@ export default function Settings() {
     </div>
   );
 }
+
+export default withAuth(Settings)

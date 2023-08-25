@@ -1,5 +1,6 @@
 import NFTForm from "../../../components/forms/program/CollectionsFormLanding"
 import React from "react"
+import withAuth from "../../../hocs/withAuth"
 
 const CreateNewCollection: React.FC = () => {
     return (
@@ -9,4 +10,4 @@ const CreateNewCollection: React.FC = () => {
     )
 }
 
-export default CreateNewCollection;
+export default withAuth(CreateNewCollection);

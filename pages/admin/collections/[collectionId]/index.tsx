@@ -2,15 +2,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NFTCard from '../../../../components/cards/collections-nft-cards/NftCard';
 import { fetchUserNFTsByCollectionId } from '../../../../api/nft';
-import { useAuth } from '../../../../hooks/useAuth';
 import { fetchCollectionById, markCollectionAsPublished } from '../../../../api/collection';
 import { NFTMetadata } from '../../../../interfaces/nft-forms';
+import withAuth from '../../../../hocs/withAuth';
 
-export default function Collections() {
+const Collections = () => {
   const router = useRouter();
   const { collectionId } = router.query;
   const [nfts, setNfts] = useState<NFTMetadata[]>([]);
-  const { user } = useAuth();
   const [collectionName, setCollectionName]= useState<string>('');
   const [collectionDescription, setCollectionDescription]= useState<string>('');
   const [collectionBasePrice, setCollectionBasePrice]= useState<number>(0);
@@ -29,7 +28,7 @@ export default function Collections() {
   };
 
   useEffect(() => {
-    if (collectionId && user) {
+    if (collectionId) {
       fetchUserNFTsByCollectionId(collectionId as string)
         .then(setNfts)
         .catch((error: Error) => setErrorMessage(error.message));
@@ -44,7 +43,7 @@ export default function Collections() {
         })
         .catch((error: Error) => setErrorMessage(error.message));
     }
-  }, [collectionId, user]);
+  }, [collectionId]);
 
 
   return (
@@ -74,3 +73,5 @@ export default function Collections() {
     </div>
   );
 }
+
+export default withAuth(Collections)

@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { readProfileData } from '../api/profile';
 import Link from 'next/link';
+import { ProfileData } from '../interfaces';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,44 +13,83 @@ export default function Login() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+  
     try {
       const auth = getAuth(app);
       const result = await signInWithEmailAndPassword(auth, email, password);
-      const user = result.user
-      const profile = await readProfileData(user)
-      if(profile.role == 'admin'){
-        router.push('/admin')
+      const user = result.user;
+  
+      // If there's a valid user object, proceed further
+      if (user) {
+        try {
+          const profile: ProfileData | null = await readProfileData(user);
+  
+          // Redirect based on profile role
+          if (profile?.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
+        } catch (error: any) {
+          // If the error is due to the user not having a profile, redirect to the registration page
+          if (
+            error.message.includes('profile') ||
+            (error.data && error.data.message.includes('profile'))
+          ) {
+            router.push('/register');
+            alert("It seems like you haven't registered yet. Please sign up!");
+          } else {
+            throw new Error('Profile fetch error. Not a new user error!');
+          }
+        }
       } else {
-      router.push('/home');
+        alert('Authentication successful, but no user information was retrieved. Please try again.');
       }
     } catch (error: any) {
       alert(error.message);
     }
-  };
+  };  
 
   const googleSignIn = async () => {
-    
     try {
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+  
+      // If there's a valid user object, proceed further
       if (user) {
-        const profile = await readProfileData(user)
-        if(profile.role == 'admin'){
-          router.push('/admin')
-        } else {
-        router.push('/home');
+        // You can add any additional checks or logic here
+  
+        try {
+          const profile: ProfileData | null = await readProfileData(user);
+  
+          // Redirect based on profile role
+          if (profile?.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
+        } catch (error: any) {
+          // If the error is due to the user not having a profile, redirect to the registration page
+          if (
+            error.message.includes('profile') ||
+            (error.data && error.data.message.includes('profile'))
+          ) {
+            router.push('/register');
+            alert("It seems like you haven't registered yet. Please sign up!")
+          } else {
+            throw new Error('Profile fetch error. Not a new user error!');
+          }
         }
       } else {
-        throw new Error('No user found');
+        alert('Authentication successful, but no user information was retrieved. Please try again.');
       }
     } catch (error: any) {
       alert(error.message);
     }
-  }
-
+  };
+  
   return (
     <>
   <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 py-12 px-4 sm:px-6 lg:px-8">
