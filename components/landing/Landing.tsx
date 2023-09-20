@@ -53,7 +53,7 @@ export default function Landing() {
     <LatestNews newsItems={newsItems} />
     <Hero 
       title="Transform your customer engagement with Tickets" 
-      subTitle="Create exclusive NFT-powered private club for your most loyal customers and fans." 
+      subTitle="Create exclusive Loyalty Program and NFT-powered private club for your most loyal customers and fans." 
       />
   </div>
   );

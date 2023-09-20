@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { NFTMetadata } from "../../interfaces/nft-forms";
 import { useAuth } from "../../hooks/useAuth";
@@ -10,9 +10,11 @@ interface StripePaymentButtonProps {
 
 export const StripePaymentButton: React.FC<StripePaymentButtonProps> = ({ nft, walletID }) => {
   const { user } = useAuth();
+  const [loading, setLoading] = useState<'Loading...' | 'Buy now'>('Buy now')
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_PUBLISHABLE_KEY!);
 
   const handleCheckout = async () => {
+    setLoading('Loading...')
     const stripe = await stripePromise;
 
     const response = await fetch('/api/v1/checkout', {
@@ -37,13 +39,14 @@ export const StripePaymentButton: React.FC<StripePaymentButtonProps> = ({ nft, w
     if (result.error) {
       alert('Error! In Stripe checkout!');
     }
+    setLoading('Buy now')
   }
 
   return (
     <button 
       onClick={handleCheckout} 
       className="w-full my-2 py-2 px-4 text-lg text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors duration-200">
-      Buy Now
+      {loading}
     </button>
   );
 }

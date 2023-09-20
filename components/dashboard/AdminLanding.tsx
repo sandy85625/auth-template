@@ -40,8 +40,8 @@ function Landing() {
       }
   
     return (
-        <section className='min-h-screen bg-white text-gray-800'>
-            <div className="px-8">
+        <section className='min-h-screen bg-white text-gray-800 md:px-8 py-8'>
+            <div>
                 <div className="flex flex-row gap-4">
                     <div className="w-1/4 px-2">
                         <ItemsCard title="Create New" description="Click to create a new program" onClick={handleNewProgramClick} />

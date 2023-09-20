@@ -28,13 +28,13 @@ const CombinedNavbar: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const linkData = profile?.role === 'admin' ? [
-    { href: '/admin', label: 'Admin', description: '',  status: true },
-    { href: '/collections', label: 'Published', description: '',  status: true },
-    { href: '/admin/collections', label: 'Collections', description: '',  status: true },
-    { href: '/admin/datasets', label: 'Datasets', description: '',  status: true },
-    { href: '/admin/analytics', label: 'Analytics', description: '',  status: true },
-    { href: '/admin/reports', label: 'Reports', description: '',  status: true },
-    { href: '/admin/settings', label: 'Settings', description: '',  status: true },
+    { href: '/admin', label: 'Admin', description: 'Admin Homepage',  status: true },
+    { href: '/collections', label: 'Published', description: 'Collections',  status: false },
+    { href: '/admin/collections', label: 'Collections', description: 'Create, Update and Delete Collections',  status: true },
+    { href: '/admin/datasets', label: 'Datasets', description: 'Import and Process Customer Data',  status: true },
+    { href: '/admin/analytics', label: 'Analytics', description: 'Data analytics',  status: true },
+    { href: '/admin/reports', label: 'Reports', description: 'Generate Report',  status: true },
+    { href: '/admin/settings', label: 'Settings', description: 'Admin Settings',  status: false },
   ] : [
     { href: '/', label: 'Home', description: '',  status: true },
     { href: '/collections', label: 'Collections', description: '',  status: true },
@@ -49,7 +49,7 @@ const CombinedNavbar: React.FC = () => {
   };
   const handleLogout = () => {
     logout();
-    router.push('/');
+    router.push('/').then(() => window.location.reload());
   };
 
   const handleProfile = () => {
